@@ -14,33 +14,29 @@ except ImportError:
     print("warning: pypandoc module not found, could not convert Markdown to RST")
     read_md = lambda f: open(f, 'r').read()
 
-DISTNAME = 'VNDS'
+DISTNAME = 'vnquant'
 INSTALL_REQUIRES = (
-    ['pandas>=0.19.2', 'requests>=2.3.0', 'wrapt>=1.10.0', 'lxml']
+    ['pandas>=0.19.2', 'requests>=2.3.0', 'wrapt>=1.10.0', 'lxml>=4.3.0', 'pypandoc>=1.4']
 )
 
 VERSION = '0.0.1'
 LICENSE = 'MIT'
-DESCRIPTION = 'VietNam stock market'
+DESCRIPTION = 'Viet Nam stock market'
 AUTHOR = "KhanhPhamDinh"
 EMAIL = "phamdinhkhanh.tkt53.neu@gmail.com"
-URL = "https://github.com/phamdinhkhanh/FirstPackagePython"
-DOWNLOAD_URL = 'https://github.com/phamdinhkhanh/FirstPackagePython'
+URL = "https://github.com/phamdinhkhanh/vnquant"
+DOWNLOAD_URL = 'https://github.com/phamdinhkhanh/vnquant'
 
 setup(name=DISTNAME,
       version=VERSION,
       description=DESCRIPTION,
+      long_description=read_md('README.md'),
       author=AUTHOR,
       author_email=EMAIL,
       url=URL,
       license = LICENSE,
       #package name are looked in python path
       packages=find_packages(exclude = ['contrib', 'docs', 'tests*']),
-      #root directory
-      # package_dir = {'':'src'},
-      # package_data={'mypack': ['template/*.txt', 'template/*.rst']},
-      #Looking for modules file
-      # py_modules = ['Birds', 'Mammals'],
       classifiers=[
         'Development Status :: 0 - Alpha',
         'Environment :: Console',
@@ -57,8 +53,6 @@ setup(name=DISTNAME,
       ],
 
       keywords = 'data',
-      # long_description = read_md('READM.md'),
       install_requires=INSTALL_REQUIRES,
-      test_suite='tests',
       zip_safe=False,
      )

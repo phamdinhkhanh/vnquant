@@ -1,8 +1,3 @@
-# from Animals.Mammals import Mammals
-# from Animals.Birds import Birds
-
-import Mammals
-import Birds
-bird = Birds.Birds()
-
-print(bird.printMembers())
+import vnquant.DataLoader as dl
+loader = dl.DataLoader('VND', '2018-02-02','2018-04-02')
+loader.download()

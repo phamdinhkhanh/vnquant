@@ -1,0 +1,5 @@
+pandas>=0.19.2
+requests>=2.3.0
+wrapt>=1.10.0
+lxml>=4.3.0
+pypandoc>=1.4
