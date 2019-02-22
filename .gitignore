@@ -1,0 +1,5 @@
+dist
+build
+.idea
+vnquant.egg-info
+.git
