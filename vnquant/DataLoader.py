@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-import src.utils as utils
+import vnquant.utils as utils
 import pandas as pd
 import logging as logging
 
