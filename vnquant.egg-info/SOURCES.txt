@@ -1,6 +1,7 @@
 README.md
 setup.py
 vnquant/DataLoader.py
+vnquant/Plot.py
 vnquant/__init__.py
 vnquant/utils.py
 vnquant.egg-info/PKG-INFO

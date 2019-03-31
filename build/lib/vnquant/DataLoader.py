@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
-import src.utils as utils
+import vnquant.utils as utils
 import pandas as pd
 import logging as logging
+import re
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 URL_VND = 'https://www.vndirect.com.vn/portal/thong-ke-thi-truong-chung-khoan/lich-su-gia.shtml'
@@ -72,7 +73,7 @@ class DataLoaderVND(DataLoadProto):
                                            'open', 'high', 'low', 'close',
                                            'avg', 'volume_match', 'volume_reconcile'])
         last_page = self.get_last_page(symbol)
-
+        # logging.info('Last page {}'.format(last_page))
         for i in range(last_page):
             stock_slice_batch = self.download_batch(i+1, symbol)
             stock_data = pd.concat([stock_data, stock_slice_batch], axis=0)
@@ -157,7 +158,12 @@ class DataLoaderVND(DataLoadProto):
 
         r = requests.post(URL_VND, form_data, headers=HEADERS)
         soup = BeautifulSoup(r.content, 'html.parser')
-        last_page = int(soup.find_all('span', {'class': 'index'})[-1].select('a')[-1].get_text())
+        # last_page = utils.extract_number(str(soup.find_all('div', {'class': 'paging'})[-1].select('a')[-1].attrs))
+        text_div = soup.find_all('div', {'class': 'paging'})[-1].get_text()
+        try:
+            last_page = int(text_div.split()[1].split('/')[1])
+        except:
+            last_page = int(text_div)
         return last_page
 
 class DataLoaderCAFE(DataLoadProto):
@@ -242,8 +248,8 @@ class DataLoaderCAFE(DataLoadProto):
 
         return stock_slice_batch
 
-# loader1 = DataLoaderVND(symbols="VND", start="2018-01-10", end="2018-02-15")
-# loader2 = DataLoaderCAFE(symbols="VND", start="2018-01-10", end="2018-02-15")
+# loader1 = DataLoaderVND(symbols="VND", start="2018-12-10", end="2019-02-15")
+# loader2 = DataLoaderCAFE(symbols="VND", start="2017-01-10", end="2019-02-15")
 # loader3 = DataLoader(symbols='VND', start="2018-01-10", end="2018-02-15", minimal=False, data_source='vnd')
 # loader3 = DataLoader(symbols='VND', start="2018-01-10", end="2018-02-15", minimal=True, data_source='vnd')
 # loader3 = DataLoader(symbols=['VND', 'VCB'], start="2018-01-10", end="2018-02-15", minimal=True, data_source='vnd')

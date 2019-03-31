@@ -12,3 +12,6 @@ def convert_text_dateformat(text, origin_type = '%Y-%m-%d', new_type = '%Y-%m-%d
 
 def split_change_col(text):
     return re.sub(r'[\(|\)%]', '', text).strip().split()
+
+def extract_number(text):
+    return int(re.search(r'\d+', text).group(0))
