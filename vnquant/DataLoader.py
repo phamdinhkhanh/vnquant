@@ -196,7 +196,11 @@ class DataLoaderCAFE(DataLoadProto):
         for i in range(1000):
             stock_slice_batch = self.download_batch(i + 1, symbol)
             stock_data = pd.concat([stock_data, stock_slice_batch], axis=0)
-            date_end_batch = stock_slice_batch.date.values[-1]
+            try:
+                date_end_batch = stock_slice_batch.date.values[-1]
+            except:
+                # start date is holiday or weekend
+                break
             is_touch_end = utils.convert_date(self.start, '%d/%m/%Y') == utils.convert_date(date_end_batch, '%d/%m/%Y')
             # logging.info('batch: {}; start date out range: {}; date_end_batch: {}'.format(i + 1, is_touch_end, date_end_batch))
             if is_touch_end:
