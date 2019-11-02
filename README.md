@@ -15,6 +15,8 @@ you must install git command line in your computer to run above command.
 ## Clone Stock Prices:
 You can load the prices of one or more stocks in specific time interval according to syntax as below.
 ```{python}
+from vnquant.DataLoader import DataLoader
+
 DataLoader(symbols="VND",
            start="2018-01-10",
            end="2018-02-15",
