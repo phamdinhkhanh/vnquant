@@ -4,6 +4,8 @@ import vnquant.utils as utils
 import pandas as pd
 import logging as logging
 import re
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 URL_VND = 'https://www.vndirect.com.vn/portal/thong-ke-thi-truong-chung-khoan/lich-su-gia.shtml'
@@ -102,7 +104,7 @@ class DataLoaderVND(DataLoadProto):
                      "searchMarketStatisticsView.symbol": symbol,
                      "strFromDate": self.start,
                      "strToDate": self.end}
-        r = requests.post(URL_VND, form_data, headers=HEADERS)
+        r = requests.post(URL_VND, form_data, headers=HEADERS, verify=False)
         soup = BeautifulSoup(r.content, 'html.parser')
         data_node = soup.find(class_='list_tktt lichsugia')
 
@@ -156,7 +158,7 @@ class DataLoaderVND(DataLoadProto):
                     "strFromDate":self.start,
                     "strToDate":self.end}
 
-        r = requests.post(URL_VND, form_data, headers=HEADERS)
+        r = requests.post(URL_VND, form_data, headers=HEADERS, verify=False)
         soup = BeautifulSoup(r.content, 'html.parser')
         # last_page = utils.extract_number(str(soup.find_all('div', {'class': 'paging'})[-1].select('a')[-1].attrs))
         text_div = soup.find_all('div', {'class': 'paging'})[-1].get_text()
@@ -237,7 +239,7 @@ class DataLoaderCAFE(DataLoadProto):
                        '__ASYNCPOST':'true'}
 
         url = URL_CAFE+symbol+"-1.chn"
-        r = requests.post(url, data = form_data, headers = HEADERS)
+        r = requests.post(url, data = form_data, headers = HEADERS, verify=False)
         soup = BeautifulSoup(r.content, 'html.parser')
         table = soup.find('table')
         stock_slice_batch = pd.read_html(str(table))[0].iloc[2:, :]
