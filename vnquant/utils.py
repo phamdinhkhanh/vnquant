@@ -15,3 +15,31 @@ def split_change_col(text):
 
 def extract_number(text):
     return int(re.search(r'\d+', text).group(0))
+
+
+def _isOHLC(data):
+    try:
+        cols = dict(data.columns)
+    except:
+        cols = list(data.columns)
+
+    defau_cols = ['high', 'low', 'close', 'open']
+
+    if all(col in cols for col in defau_cols):
+        return True
+    else:
+        return False
+
+
+def _isOHLCV(data):
+    try:
+        cols = dict(data.columns)
+    except:
+        cols = list(data.columns)
+
+    defau_cols = ['high', 'low', 'close', 'open', 'volume']
+
+    if all(col in cols for col in defau_cols):
+        return True
+    else:
+        return False
