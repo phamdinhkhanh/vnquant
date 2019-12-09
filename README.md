@@ -2,9 +2,9 @@
 
 <img src="./vnquant/img/stock_1.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
-## Introduction
+## 1. Introduction
 This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.
-## Setting:
+## 2. Setting:
 This project is in developing process, So it is only distributed on github channel. To install requiring you open the command line and type the below commands:
 ```
 git clone https://github.com/phamdinhkhanh/vnquant
@@ -12,7 +12,80 @@ cd vnquant
 python setup.py install
 ```
 you must install git command line in your computer to run above command.
-## Clone Stock Prices:
+
+## 3. Visualization: (0.0.2)
+from version 0.0.2 vnquant enable to you visualize stock price from any symbols code at source cafe or vnd or pandas data frame which have OHLC type. OHLC type meaning that your data frame columns is enough ['open', 'high', 'low', 'close'] list.
+Below is general syntax of visualization function supported on vnquant package.
+
+```{python}
+from vnquant import plot
+plot._vnquant_candle_stick(data,
+                          title=None,
+                          xlab='Date', ylab='Price',
+                          start_date=None, end_date=None,
+                          colors=['blue', 'red'],
+                          width=800, height=600,
+                          show_vol=True,
+                          data_source='VND',
+                          **kargs)
+```
+
+**Arguments**
+* `data`: is pandas data frame of OHLC type or OHLCV type, or string symbol of any VietNam stock index.
+in case symbol, data is automatically cloned from open source.
+* `title`: General title of candle stick chart. In case data is symbol, title going to be default according to cloned data.
+* `xlab`: x label. Default Date.
+* `ylab`: y label. Default Price.
+* `start_date`: start date. Default None. Must to be declared when data is symbol.
+* `end_date`: end date. Default None. Must to be declared when data is symbol.
+* `colors`: list colors defines increasing and decreasing color stick candle in order.
+* `width`: with of plot frame. Default 800px
+* `height`: height of plot frame. Default 600px
+* `show_vol`: is show volume of stock price?
+* `data_source`: invalid when use symbol intead of data frame. Source to clone data, 'VND' or 'CAFE'.
+
+### 3.1. Visualization from source VND or CAFE
+In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
+```{python}
+from vnquant import plot
+plot._vnquant_candle_stick(data='VND',
+                           title='VND stock price data and volume from 2019-09-01 to 2019-11-01',
+                           xlab='Date', ylab='Price',
+                           start_date='2019-09-01',
+                           end_date='2019-11-01',
+                           show_vol=True)
+```
+
+<img src="./vnquant/img/stock_2.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+
+You can suppress volume by set up show_vol=False. Result as below:
+
+<img src="./vnquant/img/stock_3.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+
+### 3.2. Visualization from data frame
+Data frame must be OHLC or OHLCV type. OHLC type when it includes ['open','high','low','close'] and OHLCV is ['open','high','low','close','volume']. In case your data frame have columns with the same function, you should accordingly rename its.
+
+```{python}
+from vnquant import plot
+plot._vnquant_candle_stick(data = data_vnd,
+                      title='Your data',
+                      ylab='Date', xlab='Price',
+                      show_vol=True)
+```
+
+<img src="./vnquant/img/stock_4.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+
+To check whether data_vnd frame is OHLC or OHLCV type you can try:
+
+```{python}
+from vnquant import utils
+print(utils._isOHLC(data_vnd))
+print(utils._isOHLCV(data_vnd))
+```
+
+Return `True` mean data frame is adapted types.
+
+## 4. Clone Stock Prices: (0.0.1)
 You can load the prices of one or more stocks in specific time interval according to syntax as below.
 ```{python}
 from vnquant.DataLoader import DataLoader
@@ -32,7 +105,7 @@ DataLoader(symbols="VND",
 for example `volumn_reconcile, volumn_match,...`
 * `data_source`: the source to clone the stock prices. Currently, there two main resources are `Vndirect` and `Cafef` showed by `data_source = vnd` and `cafe`, respectively. The default is `vnd`.
 
-### Clone one stock:
+### 4.1. Clone one stock:
 ```{python}
 import vnquant.DataLoader as web
 loader = web.DataLoader('VND', '2018-02-02','2018-04-02')
@@ -118,7 +191,7 @@ data.head()
   </tbody>
 </table>
 
-### Clone more stocks:
+### 4.2. Clone more stocks:
 We need to set up symbols as a list.
 ```{python}
 loader = web.DataLoader(symbols=["VND", "VCB"], start="2018-01-10", end="2018-02-15", minimal=True, data_source="vnd")
@@ -246,7 +319,7 @@ data.head()
   </tbody>
 </table>
 
-### Clone full information:
+### 4.3. Clone full information:
 To get more the others information about `volume` and `value` beside basical fields, we need to declare `minimal=False` (default `True`).
 ```{python}
 loader = web.DataLoader(symbols=["VND"], start="2018-01-10", end="2018-02-15", minimal=False)
