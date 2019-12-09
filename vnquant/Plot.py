@@ -89,43 +89,43 @@ def _vnquant_candle_stick(data,
             data = data[defau_cols].copy()
             data.columns = defau_cols
 
-    x = data.index
+        x = data.index
 
-    if not isinstance(x, pd.core.indexes.datetimes.DatetimeIndex):
-        raise IndexError('index of dataframe must be DatetimeIndex!')
+        if not isinstance(x, pd.core.indexes.datetimes.DatetimeIndex):
+            raise IndexError('index of dataframe must be DatetimeIndex!')
 
-    if start_date is None:
-        start_date = max(data.index)
-    if end_date is None:
-        end_date = max(data.index)
+        if start_date is None:
+            start_date = max(data.index)
+        if end_date is None:
+            end_date = max(data.index)
 
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.02,
-                        # subplot_titles=('Price', 'Volume'),
-                        row_heights=[0.6, 0.4])
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.02,
+                            # subplot_titles=('Price', 'Volume'),
+                            row_heights=[0.6, 0.4])
 
-    fig.append_trace(go.Candlestick(
-        x=x,
-        open=data['open'], high=data['high'],
-        low=data['low'], close=data['close'],
-        increasing_line_color=colors[0],
-        decreasing_line_color=colors[1]),
-        row=1, col=1)
-
-    if show_vol:
-        fig.append_trace(go.Bar(
+        fig.append_trace(go.Candlestick(
             x=x,
-            y=data['volume'],
-            name='Volume'),
-            row=2, col=1)
+            open=data['open'], high=data['high'],
+            low=data['low'], close=data['close'],
+            increasing_line_color=colors[0],
+            decreasing_line_color=colors[1]),
+            row=1, col=1)
 
-    fig.update_layout(
-        title=title,
-        yaxis_title=xlab,
-        xaxis_title=ylab,
-        showlegend=False
-    )
+        if show_vol:
+            fig.append_trace(go.Bar(
+                x=x,
+                y=data['volume'],
+                name='Volume'),
+                row=2, col=1)
 
-    fig.show()
+        fig.update_layout(
+            title=title,
+            yaxis_title=xlab,
+            xaxis_title=ylab,
+            showlegend=False
+        )
+
+        fig.show()
 
 
 # _vnquant_candle_stick_source('VND', '2019-09-01', '2019-11-01', show_vol=False)
