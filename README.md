@@ -18,8 +18,8 @@ from version 0.0.2 vnquant enable to you visualize stock price from any symbols 
 Below is general syntax of visualization function supported on vnquant package.
 
 ```{python}
-from vnquant import plot
-plot._vnquant_candle_stick(data,
+from vnquant import Plot
+Plot._vnquant_candle_stick(data,
                           title=None,
                           xlab='Date', ylab='Price',
                           start_date=None, end_date=None,
@@ -47,8 +47,8 @@ in case symbol, data is automatically cloned from open source.
 ### 3.1. Visualization from source VND or CAFE
 In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
 ```{python}
-from vnquant import plot
-plot._vnquant_candle_stick(data='VND',
+from vnquant import Plot
+Plot._vnquant_candle_stick(data='VND',
                            title='VND stock price data and volume from 2019-09-01 to 2019-11-01',
                            xlab='Date', ylab='Price',
                            start_date='2019-09-01',
@@ -66,8 +66,8 @@ You can suppress volume by set up show_vol=False. Result as below:
 Data frame must be OHLC or OHLCV type. OHLC type when it includes ['open','high','low','close'] and OHLCV is ['open','high','low','close','volume']. In case your data frame have columns with the same function, you should accordingly rename its.
 
 ```{python}
-from vnquant import plot
-plot._vnquant_candle_stick(data = data_vnd,
+from vnquant import Plot
+Plot._vnquant_candle_stick(data = data_vnd,
                       title='Your data',
                       ylab='Date', xlab='Price',
                       show_vol=True)
