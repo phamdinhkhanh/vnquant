@@ -13,7 +13,7 @@ URL_CAFE = "http://s.cafef.vn/Lich-su-giao-dich-"
 HEADERS = {'content-type': 'application/x-www-form-urlencoded', 'User-Agent': 'Mozilla'}
 
 class DataLoader():
-    def __init__(self, symbols, start, end, data_source = 'VND', minimal = True, *arg, **karg):
+    def __init__(self, symbols, start, end, data_source = 'CAFE', minimal = True, *arg, **karg):
         self.symbols = symbols
         self.start = start
         self.end = end
@@ -22,6 +22,7 @@ class DataLoader():
 
     def download(self):
         if str.lower(self.data_source) == 'vnd':
+            raise "Data source VND does not remain support, kindly change data_source='cafe'"
             loader = DataLoaderVND(self.symbols, self.start, self.end)
             stock_data = loader.download()
             # logging.info('Data Symbols: {}, start: {}, end: {}'.format(stock_data, start, end))

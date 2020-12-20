@@ -2,6 +2,9 @@
 
 <img src="./vnquant/img/stock_1.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
+## 0. NOTE
+Note: Currently, price on VND are not supported because of changing website graphic. You change all data_source into CAFE
+
 ## 1. Introduction
 This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.
 ## 2. Setting:
@@ -26,7 +29,7 @@ Plot._vnquant_candle_stick(data,
                           colors=['blue', 'red'],
                           width=800, height=600,
                           show_vol=True,
-                          data_source='VND',
+                          data_source='cafe', # not support vnd
                           **kargs)
 ```
 
@@ -45,6 +48,7 @@ in case symbol, data is automatically cloned from open source.
 * `data_source`: invalid when use symbol intead of data frame. Source to clone data, 'VND' or 'CAFE'.
 
 ### 3.1. Visualization from source VND or CAFE
+
 In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
 ```{python}
 from vnquant import Plot
@@ -94,7 +98,7 @@ DataLoader(symbols="VND",
            start="2018-01-10",
            end="2018-02-15",
            minimal=True,
-           data_source="vnd")
+           data_source="cafe")
 ```
 **Arguments**
 
@@ -194,7 +198,7 @@ data.head()
 ### 4.2. Clone more stocks:
 We need to set up symbols as a list.
 ```{python}
-loader = web.DataLoader(symbols=["VND", "VCB"], start="2018-01-10", end="2018-02-15", minimal=True, data_source="vnd")
+loader = web.DataLoader(symbols=["VND", "VCB"], start="2018-01-10", end="2018-02-15", minimal=True, data_source="cafe")
 data = loader.download()
 data.head()
 ```
