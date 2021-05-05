@@ -3,7 +3,10 @@
 <img src="./vnquant/img/stock_1.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
 ## 0. NOTE
-Note: Currently, price on VND are not supported because of changing website graphic. You change all data_source into CAFE
+Note: Currently, prices on VnDirect source are supported again. There are two options data source for you:
+
+* cafef: Set data_source='CAFE'
+* vndirect: set data_source='VND'
 
 ## 1. Introduction
 This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.
