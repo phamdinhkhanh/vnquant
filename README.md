@@ -447,6 +447,372 @@ data.head()
 Through this project, i hope you make your work being more covinient and easy by applying them. Though try hard, but there are many drawback,
 kindly comment and send me feed back to implement my project.
 
+# 5. Get finance, cashflow, business and basic index reports (0.0.3)
+
+In version 0.0.3 you can download finance, cashflow, business and basic index reports with class `vnquant.DataLoader.FinanceLoader`. Currently, we only support you clone one symbol per each time. To use this class you import as bellow:
+
+```
+import vnquant.DataLoader as dl
+loader = dl.FinanceLoader(symbol = 'VND', 
+                          start = '2019-06-02',
+                          end = '2021-12-31')
+```
+
+**Arguments**
+* `symbol`: a string indicates the stock name. The stock symbol in regular includes 3 upper case letters.
+* `start`: start date time with format `yyyy-mm-dd`.
+* `end`: end date time with format `yyyy-mm-dd`.
+
+## 5.1. Get finance report
+
+Function `get_finan_report()` will help you get these finance indexes. For example:
+
+```
+import vnquant.DataLoader as dl
+loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31')
+data_finan = loader.get_finan_report()
+data_finan.head()
+```
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2021-06</th>
+      <th>2021-03</th>
+      <th>2020-12</th>
+      <th>2020-09</th>
+      <th>2020-06</th>
+      <th>2020-03</th>
+      <th>2019-12</th>
+      <th>2019-09</th>
+      <th>2019-06</th>
+    </tr>
+    <tr>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Tài sản ngắn hạn</th>
+      <td>21351441834807</td>
+      <td>17347112129802</td>
+      <td>12793253609747</td>
+      <td>11585099253268</td>
+      <td>11479005695043</td>
+      <td>10851511570130</td>
+      <td>11239350733660</td>
+      <td>11059560981795</td>
+      <td>10590145635691</td>
+    </tr>
+    <tr>
+      <th>Tài sản tài chính ngắn hạn</th>
+      <td>21339567743512</td>
+      <td>17332349291032</td>
+      <td>12770938291296</td>
+      <td>11570420145910</td>
+      <td>11465268994352</td>
+      <td>10826493556341</td>
+      <td>11222476803929</td>
+      <td>11036102039564</td>
+      <td>10550582164047</td>
+    </tr>
+    <tr>
+      <th>Tiền và các khoản tương đương tiền</th>
+      <td>1153684350307</td>
+      <td>590663521250</td>
+      <td>595786368281</td>
+      <td>175314778804</td>
+      <td>185532378242</td>
+      <td>368330609085</td>
+      <td>613548205346</td>
+      <td>298144380199</td>
+      <td>413837038988</td>
+    </tr>
+    <tr>
+      <th>Tiền</th>
+      <td>778884350307</td>
+      <td>460708745512</td>
+      <td>509970753138</td>
+      <td>141314778804</td>
+      <td>148847077857</td>
+      <td>346330609085</td>
+      <td>611548205346</td>
+      <td>158744380199</td>
+      <td>252137038988</td>
+    </tr>
+    <tr>
+      <th>Tiền gửi của người đầu tư về giao dịch chứng khoán</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
+## 5.2. Get business report
+
+To get business report of each symbol, you use `get_business_report()` function as below:
+
+```
+import vnquant.DataLoader as dl
+loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+data_bus = loader.get_business_report()
+data_bus.head()
+```
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2021-06</th>
+      <th>2021-03</th>
+      <th>2020-12</th>
+      <th>2020-09</th>
+      <th>2020-06</th>
+      <th>2020-03</th>
+      <th>2019-12</th>
+      <th>2019-09</th>
+      <th>2019-06</th>
+    </tr>
+    <tr>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Lãi từ các tài sản tài chính ghi nhận thông qua lãi/lỗ ( FVTPL)</th>
+      <td>384484114460</td>
+      <td>446903481873</td>
+      <td>348445083732</td>
+      <td>177846582328</td>
+      <td>126873424297</td>
+      <td>112699410946</td>
+      <td>69471930133</td>
+      <td>100788177914</td>
+      <td>96112568053</td>
+    </tr>
+    <tr>
+      <th>Lãi bán các tài sản tài chính PVTPL</th>
+      <td>187329856826</td>
+      <td>258061271830</td>
+      <td>321502700913</td>
+      <td>126020773731</td>
+      <td>120870780627</td>
+      <td>121996865833</td>
+      <td>77348559746</td>
+      <td>70332267851</td>
+      <td>62535937574</td>
+    </tr>
+    <tr>
+      <th>Chênh lệch tăng đánh giá lại các TSTC thông qua lãi/lỗ</th>
+      <td>192578271638</td>
+      <td>188425144043</td>
+      <td>-8160509655</td>
+      <td>33713693597</td>
+      <td>-848309517</td>
+      <td>-10832424389</td>
+      <td>-13633761575</td>
+      <td>28457177453</td>
+      <td>15139720013</td>
+    </tr>
+    <tr>
+      <th>Cổ tức, tiền lãi phát sinh từ tài sản tài chính PVTPL</th>
+      <td>4575985996</td>
+      <td>417066000</td>
+      <td>35102892474</td>
+      <td>18112115000</td>
+      <td>6850953187</td>
+      <td>1534969502</td>
+      <td>5757131962</td>
+      <td>1998732610</td>
+      <td>18436910466</td>
+    </tr>
+    <tr>
+      <th>Lãi từ các khoản đầu tư nắm giữ đến ngày đáo hạn</th>
+      <td>24948288940</td>
+      <td>108779296202</td>
+      <td>98753552528</td>
+      <td>84000482631</td>
+      <td>84108399683</td>
+      <td>105941161289</td>
+      <td>107029644615</td>
+      <td>100310037665</td>
+      <td>120061106620</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## 5.3. Get cashflow report
+
+Function `get_cashflow_report()` shall support to clone cashflow report:
+
+```
+import vnquant.DataLoader as dl
+loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+data_cash = loader.get_cashflow_report()
+data_cash.head()
+```
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2021-06</th>
+      <th>2021-03</th>
+      <th>2020-09</th>
+      <th>2020-06</th>
+      <th>2020-03</th>
+      <th>2019-12</th>
+      <th>2019-09</th>
+      <th>2019-06</th>
+    </tr>
+    <tr>
+      <th>index</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Điều chỉnh cho các khoản</th>
+      <td>117772457799</td>
+      <td>102102918502</td>
+      <td>39938806717</td>
+      <td>-2179656198</td>
+      <td>189614451308</td>
+      <td>77119446501</td>
+      <td>115901816119</td>
+      <td>310400347299</td>
+    </tr>
+    <tr>
+      <th>Chi phí khấu hao tài sản cố định</th>
+      <td>7121178573</td>
+      <td>5117724702</td>
+      <td>5200320730</td>
+      <td>4817922370</td>
+      <td>5082314726</td>
+      <td>4956658731</td>
+      <td>5024428635</td>
+      <td>5218835903</td>
+    </tr>
+    <tr>
+      <th>Phân bổ lợi thế thương mại</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Dự phòng giảm giá các khoản đầu tư ngắn hạn, dài hạn</th>
+      <td>15351994938</td>
+      <td>7673582615</td>
+      <td>-50406427024</td>
+      <td>-97302010585</td>
+      <td>74769599906</td>
+      <td>-47666085953</td>
+      <td>-1958363587</td>
+      <td>194803059759</td>
+    </tr>
+    <tr>
+      <th>Lãi, lỗ chênh lệch tỷ giá hối đoái chưa thực hiện</th>
+      <td>2291430861</td>
+      <td>0</td>
+      <td>-855383375</td>
+      <td>-855383375</td>
+      <td>0</td>
+      <td>-535741671</td>
+      <td>-136318575</td>
+      <td>136318575</td>
+    </tr>
+  </tbody>
+</table>
+
+## 5.4. Get basic index report
+
+This function provide to you basic and important index of each symbol such as: `ROA, ROE, Net Profit Marget, Net Revenue Growth, Profit After tax Growth`
+
+```
+import vnquant.DataLoader as dl
+loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+data_basic = loader.get_basic_index()
+data_basic.head()
+```
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>2020-12</th>
+      <th>2019-12</th>
+    </tr>
+    <tr>
+      <th>index</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Profit After Tax Growth (YoY)</th>
+      <td>0.810405</td>
+      <td>0.025519</td>
+    </tr>
+    <tr>
+      <th>Net Revenue Growth (YoY)</th>
+      <td>0.421240</td>
+      <td>-0.023797</td>
+    </tr>
+    <tr>
+      <th>Net Profit Margin (Yr)</th>
+      <td>0.324553</td>
+      <td>0.254787</td>
+    </tr>
+    <tr>
+      <th>ROE last 4 quarters</th>
+      <td>0.195974</td>
+      <td>0.123374</td>
+    </tr>
+    <tr>
+      <th>ROA last 4 quarters</th>
+      <td>0.053917</td>
+      <td>0.033224</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
