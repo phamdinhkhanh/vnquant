@@ -1,4 +1,4 @@
-build
-dist
-vnquant.egg-info
+build/
+dist/
+vnquant.egg-info/
 *__pycache__*
