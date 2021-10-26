@@ -25,7 +25,7 @@
 # data_cash.head().to_html('data_cashflow.html')
 
 import vnquant.DataLoader as dl
-loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+loader = dl.FinanceLoader('VND', '2019-06-02','2020-12-31', data_source='VND', minimal=True)
 data_basic = loader.get_basic_index()
 print(data_basic.head())
 data_basic.head().to_html('data_basic.html')

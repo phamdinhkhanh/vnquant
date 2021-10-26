@@ -422,10 +422,12 @@ class FinanceLoader():
         years = np.arange(start_year, end_year+1, 1)[::-1]
         years = ['{}-12-31'.format(year) for year in years]
         data_dates = {}
+        user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36'
+        headers = {'User-Agent': user_agent}
         for year in years:
-            page = requests.get("https://finfo-api.vndirect.com.vn/v4/ratios?q=code:{}~itemCode:53030,52005,51050,53021,52001,52002,54018,712010,712020,712030,712040~reportDate:{}".format(self.symbol, year))
+            page = requests.get("https://finfo-api.vndirect.com.vn/v4/ratios?q=code:{}~itemCode:53030,52005,51050,53021,52001,52002,54018,712010,712020,712030,712040~reportDate:{}".format(self.symbol, year), headers=headers)
             data = page.json()
-
+            
             for item in data['data']:
                 date = item['reportDate']
                 itemName = item['itemName']
