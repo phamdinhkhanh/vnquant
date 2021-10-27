@@ -112,7 +112,7 @@ DataLoader(symbols="VND",
 ```
 **Arguments**
 
-* `symbols`: a string or list of strings indicate the stock names. The stock symbols in regular include 3 upper case letters except several special index such as: `VN30INDEX, VN100-INDEX, HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` in case your `data_source = "cafe"` and `VN30, HNX30, UPCOM` in case your `data_source = "vnd"`.
+* `symbols`: a string or list of strings indicate the stock names. The stock symbols in regular include 3 upper case letters except several special index such as: `E1VFVN30, VN100-INDEX, HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` in case your `data_source = "cafe"` and `VN30, HNX30, UPCOM` in case your `data_source = "vnd"`.
 * `start`: start date time with format `yyyy-mm-dd`.
 * `end`: end date time with format `yyyy-mm-dd`.
 * `minimal`: default is True, we only clone `high, low, open, close, adjust price, volume` of stocks. In contrast, more information is added,

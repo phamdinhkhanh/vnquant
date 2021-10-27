@@ -87,7 +87,7 @@ class DataLoaderVND(DataLoadProto):
             "page": 1,
             "q": query
         }
-        res = requests.get(API_VNDIRECT, params=params)
+        res = requests.get(API_VNDIRECT, params=params, headers=HEADERS)
         data = res.json()['data']  
         data = pd.DataFrame(data)
         stock_data = data[['date', 'adClose', 'close', 'pctChange', 'average', 'nmVolume',

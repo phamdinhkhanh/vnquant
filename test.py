@@ -1,8 +1,8 @@
 # 1. Test data loader
-# import vnquant.DataLoader as dl
-# loader = dl.DataLoader('VND', '2018-02-02','2018-04-02', data_source='VND', minimal=True)
-# data = loader.download()
-# print(data.head())
+import vnquant.DataLoader as dl
+loader = dl.DataLoader('E1VFVN30', '2018-02-02','2018-04-02', data_source='VND', minimal=True)
+data = loader.download()
+print(data.head())
 
 # 2. Test clone finance
 # import vnquant.DataLoader as dl
@@ -24,8 +24,8 @@
 # print(data_cash.head())
 # data_cash.head().to_html('data_cashflow.html')
 
-import vnquant.DataLoader as dl
-loader = dl.FinanceLoader('VND', '2019-06-02','2020-12-31', data_source='VND', minimal=True)
-data_basic = loader.get_basic_index()
-print(data_basic.head())
-data_basic.head().to_html('data_basic.html')
+# import vnquant.DataLoader as dl
+# loader = dl.FinanceLoader('VND', '2019-06-02','2020-12-31', data_source='VND', minimal=True)
+# data_basic = loader.get_basic_index()
+# print(data_basic.head())
+# data_basic.head().to_html('data_basic.html')
