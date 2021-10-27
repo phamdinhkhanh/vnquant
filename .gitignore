@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-build
-dist
-vnquant.egg-info
-=======
 build/
 dist/
 vnquant.egg-info/
 *__pycache__*
->>>>>>> hotfix/finfo_header

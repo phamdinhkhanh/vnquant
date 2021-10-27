@@ -11,6 +11,9 @@ Note: Currently, prices on VnDirect source are supported again. There are two op
 ## 1. Introduction
 This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.
 ## 2. Setting:
+
+### 2.1. Setup on local machine
+
 This project is in developing process, So it is only distributed on github channel. To install requiring you open the command line and type the below commands:
 ```
 git clone https://github.com/phamdinhkhanh/vnquant
@@ -18,6 +21,10 @@ cd vnquant
 python setup.py install
 ```
 you must install git command line in your computer to run above command.
+
+### 2.2. Google colab
+
+To use package in google colab, you have to mount point to google drive folder first and setup the same as in local machine. Reference to [google colab - vnquant example](https://colab.research.google.com/drive/1PXuY9ZYwn8FB4ZZm_swPYK1FTmZBTG_-?usp=sharing) for detail.
 
 ## 3. Visualization: (0.0.2)
 from version 0.0.2 vnquant enable to you visualize stock price from any symbols code at source cafe or vnd or pandas data frame which have OHLC type. OHLC type meaning that your data frame columns is enough ['open', 'high', 'low', 'close'] list.
