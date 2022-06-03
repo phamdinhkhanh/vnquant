@@ -1,7 +1,8 @@
-from vnquant import DataLoader
+# Copyright (c) general_backbone. All rights reserved.
+from vnquant.data import DataLoader
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import vnquant.utils as utils
+import vnquant.utils.utils as utils
 import pandas as pd
 
 def _vnquant_candle_stick_source(symbol,
@@ -11,7 +12,7 @@ def _vnquant_candle_stick_source(symbol,
                                  show_vol=True,
                                  data_source='VND',
                                  **kargs):
-    loader = DataLoader.DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source)
+    loader = DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source)
     data = loader.download()
     symbol = list(data.columns.levels[1])[0]
     data.columns = ['high', 'low', 'open', 'close', 'adjust', 'volume']

@@ -1,6 +1,6 @@
 # vnquant package
 
-<img src="./vnquant/img/stock_1.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+<img src="./vnquant/imgs/stock_1.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
 ## 0. NOTE
 Note: Currently, prices on VnDirect source are supported again. There are two options data source for you:
@@ -31,8 +31,8 @@ from version 0.0.2 vnquant enable to you visualize stock price from any symbols 
 Below is general syntax of visualization function supported on vnquant package.
 
 ```{python}
-from vnquant import Plot
-Plot._vnquant_candle_stick(data,
+import vnquant.plot as pl
+pl._vnquant_candle_stick(data,
                           title=None,
                           xlab='Date', ylab='Price',
                           start_date=None, end_date=None,
@@ -61,8 +61,8 @@ in case symbol, data is automatically cloned from open source.
 
 In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
 ```{python}
-from vnquant import Plot
-Plot._vnquant_candle_stick(data='VND',
+from vnquant import pl
+pl._vnquant_candle_stick(data='VND',
                            title='VND stock price data and volume from 2019-09-01 to 2019-11-01',
                            xlab='Date', ylab='Price',
                            start_date='2019-09-01',
@@ -70,24 +70,24 @@ Plot._vnquant_candle_stick(data='VND',
                            show_vol=True)
 ```
 
-<img src="./vnquant/img/stock_2.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+<img src="./vnquant/imgs/stock_2.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
 You can suppress volume by set up show_vol=False. Result as below:
 
-<img src="./vnquant/img/stock_3.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+<img src="./vnquant/imgs/stock_3.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
 ### 3.2. Visualization from data frame
 Data frame must be OHLC or OHLCV type. OHLC type when it includes ['open','high','low','close'] and OHLCV is ['open','high','low','close','volume']. In case your data frame have columns with the same function, you should accordingly rename its.
 
 ```{python}
-from vnquant import Plot
-Plot._vnquant_candle_stick(data = data_vnd,
+from vnquant import pl
+pl._vnquant_candle_stick(data = data_vnd,
                       title='Your data',
                       ylab='Date', xlab='Price',
                       show_vol=True)
 ```
 
-<img src="./vnquant/img/stock_4.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
+<img src="./vnquant/imgs/stock_4.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
 To check whether data_vnd frame is OHLC or OHLCV type you can try:
 
@@ -102,9 +102,9 @@ Return `True` mean data frame is adapted types.
 ## 4. Clone Stock Prices: (0.0.1)
 You can load the prices of one or more stocks in specific time interval according to syntax as below.
 ```{python}
-from vnquant.DataLoader import DataLoader
+import vnquant.data as dt
 
-DataLoader(symbols="VND",
+dt.DataLoader(symbols="VND",
            start="2018-01-10",
            end="2018-02-15",
            minimal=True,
@@ -121,8 +121,8 @@ for example `volumn_reconcile, volumn_match,...`
 
 ### 4.1. Clone one stock:
 ```{python}
-import vnquant.DataLoader as web
-loader = web.DataLoader('VND', '2018-02-02','2018-04-02')
+import vnquant.data as dt
+loader = dt.DataLoader('VND', '2018-02-02','2018-04-02')
 data = loader.download()
 data.head()
 ```
@@ -208,7 +208,7 @@ data.head()
 ### 4.2. Clone more stocks:
 We need to set up symbols as a list.
 ```{python}
-loader = web.DataLoader(symbols=["VND", "VCB"], start="2018-01-10", end="2018-02-15", minimal=True, data_source="cafe")
+loader = dt.DataLoader(symbols=["VND", "VCB"], start="2018-01-10", end="2018-02-15", minimal=True, data_source="cafe")
 data = loader.download()
 data.head()
 ```
@@ -336,7 +336,7 @@ data.head()
 ### 4.3. Clone full information:
 To get more the others information about `volume` and `value` beside basical fields, we need to declare `minimal=False` (default `True`).
 ```{python}
-loader = web.DataLoader(symbols=["VND"], start="2018-01-10", end="2018-02-15", minimal=False)
+loader = dt.DataLoader(symbols=["VND"], start="2018-01-10", end="2018-02-15", minimal=False)
 data = loader.download()
 data.head()
 ```
@@ -456,11 +456,11 @@ kindly comment and send me feed back to implement my project.
 
 # 5. Get finance, cashflow, business and basic index reports (0.0.3)
 
-In version 0.0.3 you can download finance, cashflow, business and basic index reports with class `vnquant.DataLoader.FinanceLoader`. Currently, we only support you clone one symbol per each time. To use this class you import as bellow:
+In version 0.0.3 you can download finance, cashflow, business and basic index reports with class `vnquant.data.FinanceLoader`. Currently, we only support you clone one symbol per each time. To use this class you import as bellow:
 
 ```
-import vnquant.DataLoader as dl
-loader = dl.FinanceLoader(symbol = 'VND', 
+import vnquant.data as dt
+loader = dt.FinanceLoader(symbol = 'VND', 
                           start = '2019-06-02',
                           end = '2021-12-31')
 ```
@@ -475,8 +475,8 @@ loader = dl.FinanceLoader(symbol = 'VND',
 Function `get_finan_report()` will help you get these finance indexes. For example:
 
 ```
-import vnquant.DataLoader as dl
-loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31')
+import vnquant.data as dt
+loader = dt.FinanceLoader('VND', '2019-06-02','2021-12-31')
 data_finan = loader.get_finan_report()
 data_finan.head()
 ```
@@ -576,8 +576,8 @@ data_finan.head()
 To get business report of each symbol, you use `get_business_report()` function as below:
 
 ```
-import vnquant.DataLoader as dl
-loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+import vnquant.data as dt
+loader = dt.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
 data_bus = loader.get_business_report()
 data_bus.head()
 ```
@@ -679,8 +679,8 @@ data_bus.head()
 Function `get_cashflow_report()` shall support to clone cashflow report:
 
 ```
-import vnquant.DataLoader as dl
-loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+import vnquant.data as dt
+loader = dt.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
 data_cash = loader.get_cashflow_report()
 data_cash.head()
 ```
@@ -774,8 +774,8 @@ data_cash.head()
 This function provide to you basic and important index of each symbol such as: `ROA, ROE, Net Profit Marget, Net Revenue Growth, Profit After tax Growth`
 
 ```
-import vnquant.DataLoader as dl
-loader = dl.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
+import vnquant.data as dt
+loader = dt.FinanceLoader('VND', '2019-06-02','2021-12-31', data_source='VND', minimal=True)
 data_basic = loader.get_basic_index()
 data_basic.head()
 ```
@@ -820,37 +820,3 @@ data_basic.head()
     </tr>
   </tbody>
 </table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
