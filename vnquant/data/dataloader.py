@@ -3,13 +3,12 @@ from bs4 import BeautifulSoup
 from vnquant import utils
 import pandas as pd
 import logging as logging
-import re
 import requests
-import time
-import numpy as np
 from datetime import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 from vnquant import configs
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
