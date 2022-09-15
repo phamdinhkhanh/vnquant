@@ -1,6 +1,5 @@
 # Copyright (c) general_backbone. All rights reserved.
 from bs4 import BeautifulSoup
-import requests
 from vnquant import utils
 import pandas as pd
 import logging as logging

@@ -2,7 +2,7 @@
 from datetime import datetime
 import re
 import random
-import httpx
+import requests
 import logging
 import urllib.parse
 from copy import deepcopy
@@ -111,6 +111,17 @@ def get_ind_class(
         @english_name: str - part of the industry's English name to query for
         @vietnamese_name: str - part of the industry's Vietnamese name to query for
         @result_size: int - the number of industry to include on 1 result page
+
+    :example:
+    logging.basicConfig(level=logging.INFO)
+
+    START = '2020-02-02'
+    END = '2020-04-02'
+    ind_df, meta = get_ind_class(code_list=["ASM", "AAA"])
+    p_df = get_price_from_ind_df(ind_df, START, END)
+
+    logging.info(ind_df)
+    logging.info(p_df)
     '''
     
     # Prepare payload
@@ -129,16 +140,18 @@ def get_ind_class(
     payload['q'] = payload_q_str
     payload['size'] = result_size
     
-    payload_str = urllib.parse.urlencode(payload, safe=PAYLOAD_SAFE_CHARS)    
+    payload_str = urllib.parse.urlencode(payload, safe=PAYLOAD_SAFE_CHARS)
     headers = {
         'content-type': CONTENT_TYPE,
         'User-Agent': random.choice(USER_AGENTS)
     }
-    resp = httpx.get(
+    
+    resp = requests.get(
         BASE_URL,
         params=payload_str,
         headers=headers
     )
+ 
     print('BASE_URL: ', BASE_URL)
     print('payload_str: ', payload_str)
     print('header: ', headers)

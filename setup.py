@@ -15,7 +15,7 @@ except ImportError:
 
 DISTNAME = 'vnquant'
 INSTALL_REQUIRES = (
-    ['pandas>=0.19.2', 'numpy>=1.20.2', 'requests>=2.3.0', 'wrapt>=1.10.0', 'lxml>=4.3.0', 'pypandoc>=1.4', 'plotly>=4.2.1', 'bs4>=0.0.1', 'httpx>=0.22.0']
+    ['pandas>=0.19.2', 'numpy>=1.20.2', 'requests>=2.3.0', 'wrapt>=1.10.0', 'lxml>=4.3.0', 'pypandoc>=1.4', 'plotly>=4.2.1', 'bs4>=0.0.1']
 )
 
 VERSION = '0.0.3'
