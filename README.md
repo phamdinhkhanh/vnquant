@@ -32,15 +32,15 @@ Below is general syntax of visualization function supported on vnquant package.
 
 ```{python}
 import vnquant.plot as pl
-pl._vnquant_candle_stick(data,
-                          title=None,
-                          xlab='Date', ylab='Price',
-                          start_date=None, end_date=None,
-                          colors=['blue', 'red'],
-                          width=800, height=600,
-                          show_vol=True,
-                          data_source='cafe', # not support vnd
-                          **kargs)
+pl.vnquant_candle_stick(data,
+                        title=None,
+                        xlab='Date', ylab='Price',
+                        start_date=None, end_date=None,
+                        colors=['blue', 'red'],
+                        width=800, height=600,
+                        show_advanced=[],
+                        data_source='cafe', # not support vnd
+                        **kargs)
 ```
 
 **Arguments**
@@ -54,7 +54,7 @@ in case symbol, data is automatically cloned from open source.
 * `colors`: list colors defines increasing and decreasing color stick candle in order.
 * `width`: with of plot frame. Default 800px
 * `height`: height of plot frame. Default 600px
-* `show_vol`: is show volume of stock price?
+* `show_advanced`: list of advanced stock index to show up. Each element belongs to ['volume', 'macd', 'rsi'].
 * `data_source`: invalid when use symbol intead of data frame. Source to clone data, 'VND' or 'CAFE'.
 
 ### 3.1. Visualization from source VND or CAFE
@@ -62,12 +62,15 @@ in case symbol, data is automatically cloned from open source.
 In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
 ```{python}
 from vnquant import plot as pl
-pl._vnquant_candle_stick(data='VND',
-                           title='VND stock price data and volume from 2019-09-01 to 2019-11-01',
-                           xlab='Date', ylab='Price',
-                           start_date='2019-09-01',
-                           end_date='2019-11-01',
-                           show_vol=True)
+pl.vnquant_candle_stick(
+    data='VND',
+    title='VND symbol from 2019-09-01 to 2019-11-01',
+    xlab='Date', ylab='Price',
+    start_date='2019-09-01',
+    end_date='2019-11-01',
+    data_source='CAFE',
+    show_advanced=['volume', 'macd', 'rsi']
+)
 ```
 
 <img src="./vnquant/imgs/stock_2.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
@@ -81,10 +84,12 @@ Data frame must be OHLC or OHLCV type. OHLC type when it includes ['open','high'
 
 ```{python}
 from vnquant import pl
-pl._vnquant_candle_stick(data = data_vnd,
-                      title='Your data',
-                      ylab='Date', xlab='Price',
-                      show_vol=True)
+pl.vnquant_candle_stick(
+    data = data_vnd,
+    title='Your data',
+    ylab='Date', xlab='Price',
+    show_advanced=['volume', 'macd', 'rsi']
+)
 ```
 
 <img src="./vnquant/imgs/stock_4.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
