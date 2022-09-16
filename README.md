@@ -61,7 +61,7 @@ in case symbol, data is automatically cloned from open source.
 
 In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
 ```{python}
-from vnquant import pl
+from vnquant import plot as pl
 pl._vnquant_candle_stick(data='VND',
                            title='VND stock price data and volume from 2019-09-01 to 2019-11-01',
                            xlab='Date', ylab='Price',
