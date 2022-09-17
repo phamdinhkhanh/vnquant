@@ -24,7 +24,7 @@ you must install git command line in your computer to run above command.
 
 ### 2.2. Google colab
 
-To use package in google colab, you have to mount point to google drive folder first and setup the same as in local machine. Reference to [google colab - vnquant example](https://colab.research.google.com/drive/1PXuY9ZYwn8FB4ZZm_swPYK1FTmZBTG_-?usp=sharing) for detail.
+To use package in google colab, you have to mount point to google drive folder first and setup the same as in local machine. Reference to [google colab - vnquant example](https://drive.google.com/file/d/10KNNA4sZTk2dKW6wvv3tLMivgQDgd-5-/view?usp=sharing) for detail.
 
 ## 3. Visualization: (0.0.2)
 from version 0.0.2 vnquant enable to you visualize stock price from any symbols code at source cafe or vnd or pandas data frame which have OHLC type. OHLC type meaning that your data frame columns is enough ['open', 'high', 'low', 'close'] list.
