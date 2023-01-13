@@ -1,4 +1,4 @@
-# Copyright (c) general_backbone. All rights reserved.
+# Copyright (c) vnquant. All rights reserved.
 from .utils import *
 from .data import *
 from .plot import *
