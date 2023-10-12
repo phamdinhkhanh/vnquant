@@ -25,11 +25,12 @@ AUTHOR = "KhanhPhamDinh"
 EMAIL = "phamdinhkhanh.tkt53.neu@gmail.com"
 URL = "https://github.com/phamdinhkhanh/vnquant"
 DOWNLOAD_URL = 'https://github.com/phamdinhkhanh/vnquant'
-
+LONG_DESCRIPTION='This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.'
+## 2. Setting:'
 setup(name=DISTNAME,
       version=VERSION,
       description=DESCRIPTION,
-      long_description=read_md('README.md'),
+      long_description=LONG_DESCRIPTION,
       author=AUTHOR,
       author_email=EMAIL,
       url=URL,

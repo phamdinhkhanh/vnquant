@@ -31,7 +31,11 @@
 # data_basic.head().to_html('data_basic.html')
 
 # import vnquant.plot as pl
-# pl._vnquant_candle_stick_source('VND', '2019-09-01', '2019-11-01', show_vol=False)
+# pl.vnquant_candle_stick_source('VND', '2019-09-01', '2019-11-01', show_vol=True)
+
+import vnquant.plot as pl2
+pl2.plot_data('VND', '2022-09-01', '2023-11-01')
 
 # from vnquant import utils
 # print(utils._isOHLC)
+

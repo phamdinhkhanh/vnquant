@@ -202,7 +202,7 @@ class DataLoaderVND(DataLoadProto):
         form_data = {"searchMarketStatisticsView.symbol":symbol,
                     "strFromDate":self.start,
                     "strToDate":self.end}
-
+        
         r = requests.post(URL_VND, form_data, headers=HEADERS, verify=False)
         soup = BeautifulSoup(r.content, 'html.parser')
         # last_page = utils.extract_number(str(soup.find_all('div', {'class': 'paging'})[-1].select('a')[-1].attrs))
@@ -297,8 +297,12 @@ class DataLoaderCAFE(DataLoadProto):
                         'open', 'high', 'low']
 
         return stock_slice_batch
-
-# loader1 = DataLoaderVND(symbols="VND", start="2021-01-01", end="2021-02-15")
+    
+if __name__ == "__main__":
+    # pass
+    loader1 = DataLoaderVND(symbols="VND", start="2021-01-01", end="2021-02-15")
+    print(loader1.download_one('VNM'))
+    
 # loader2 = DataLoaderCAFE(symbols="VND", start="2017-01-10", end="2019-02-15")
 # loader3 = DataLoader(symbols='VND', start="2018-01-10", end="2018-02-15", minimal=False, data_source='vnd')
 # loader3 = DataLoader(symbols='VND', start="2018-01-10", end="2018-02-15", minimal=True, data_source='vnd')

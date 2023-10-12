@@ -8,6 +8,9 @@ import urllib.parse
 from copy import deepcopy
 from typing import List
 from vnquant.configs import USER_AGENTS
+from dateutil.relativedelta import relativedelta
+from dateutil.parser import parse
+from datetime import datetime, timedelta
 
 def clean_text(text):
     return re.sub('[(\n\t)*]', '', text).strip()
@@ -17,6 +20,16 @@ def convert_date(text, date_type = '%Y-%m-%d'):
 
 def convert_text_dateformat(text, origin_type = '%Y-%m-%d', new_type = '%Y-%m-%d'):
     return convert_date(text, origin_type).strftime(new_type)
+
+def date_string_to_timestamp_utc7(date_string):
+    try:
+        date_obj = parse(date_string)
+        utc_offset = timedelta(hours=7)
+        timestamp_utc7 = (date_obj - utc_offset).timestamp()
+        return timestamp_utc7
+    except (ValueError, OverflowError):
+        return None  # Handle invalid date strings
+    
 
 def split_change_col(text):
     return re.sub(r'[\(|\)%]', '', text).strip().split()
@@ -156,3 +169,33 @@ def get_ind_class(
     print('payload_str: ', payload_str)
     print('header: ', headers)
     return resp.json()
+
+
+
+def date_difference_description(start_date: datetime, end_date: datetime) -> str:
+    """ 
+    Calculate the difference between datetime1 and datetime2
+    If the difference is less than a day, return 'hours'
+    If the difference is less than a week, return 'days'
+    If the difference is less than a year, return 'months'
+    If the difference is more than a year, return 'years'
+    ----------
+    Args: 
+        datetime1: datetime -> start date
+        datetime2: datetime -> end date
+    returns:
+        str -> time marks
+    """
+    difference = relativedelta(convert_date(start_date), convert_date(end_date))
+    
+    if difference.years == 0 and difference.months == 0 and difference.days == 0:
+        return 'hours'
+    elif difference.years == 0 and difference.months == 0:
+        return 'days'
+    elif difference.years == 0:
+        return 'months'
+    else:
+        return 'years'
+    
+if __name__ == "__main__":
+    date_difference_description('2021-01-02', '2021-01-01')
