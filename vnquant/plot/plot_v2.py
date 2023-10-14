@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------------
-# project: vn_quant_update
+# project: vn_quant_upgrade
 # author: binh.truong
 # date: 1st Jan 2023
 # ---------------------------------------------------------------------------
-#TODO: 1. Add plot for dataframe also (rase exception if the input is dataframe)
-#TODO: 2. Add color different for each WMA
-#TODO: 4. Add multiple format of datetime (Ex. 2023-01-01, 2023-1-1, 2023/01/01, 2023/1/1, ...)
+#TODO: Add color different for each WMA
+
 
 import pandas as pd
 import numpy as np
+from typing import List, Union
+from datetime import datetime, timedelta
 from vnquant.data import VND_OHLCV
-from vnquant.utils.utils import date_difference_description, date_string_to_timestamp_utc7
+from vnquant.utils.utils import date_difference_description, date_string_to_timestamp_utc7, datetime_to_timestamp_utc7
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from typing import List, Union
 
 
 def _plot_daily_data(
@@ -22,8 +22,8 @@ def _plot_daily_data(
     WMA: Union[int, List[int]] = None,
     show_vol: bool = False,
     symbol: str = None,
-    start_date: str = None, 
-    end_date: str = None,
+    start_date: Union[str, datetime] = None, 
+    end_date: Union[str, datetime] = None,
     **kwargs
 ) -> None:
     """
@@ -45,15 +45,21 @@ def _plot_daily_data(
     Returns:
         Interactive plotly chart: .html file
     """
+    row_heights = [1.0] # default row height
+    num_indices = 0 # default number of indices
+    if show_vol:
+        num_indices = 1
+        row_heights = [0.8, 0.2]
+
     if WMA:
         raise Exception('Time period is too short to display weekly moving average.')
     # Create figure with secondary y-axis
     fig = make_subplots(
-        rows=2, 
+        rows=num_indices+1, 
         cols=1, 
         shared_xaxes=True, 
         vertical_spacing=0.02, 
-        row_heights=[0.8, 0.2]
+        row_heights=row_heights
     )
 
     # Add the candlestick chart to the top subplot
@@ -83,17 +89,17 @@ def _plot_daily_data(
     if show_vol:
         # Calculate price changes
         data['PriceChange'] = data['close'] - data['open']
-        data['VolumeColor'] = '00A86B'  # Default color is 00A86B
-        data.loc[data['PriceChange'] < 0, 'VolumeColor'] = 'FF2400'
+        data['VolumeColor'] = '#00A86B'  # Default color is 00A86B
+        data.loc[data['PriceChange'] < 0, 'VolumeColor'] = '#FF2400'
         # Add volume bars to the figure
-        fig.add_trace(
+        fig.append_trace(
             go.Bar(
                 x=data['Date'],
                 y=data['volume'],
-                name="Volume",
+                name='Volume',
                 yaxis='y2',  # Use a second y-axis for volume
                 marker=dict(color=data['VolumeColor'])
-            ), 
+            ),
             row=2, col=1
         )
 
@@ -135,8 +141,8 @@ def _plot_yearly_data(
     WMA: Union[int, List[int]] = None,
     show_advanced: List[str] = None,
     symbol: str = None,
-    start_date: str = None,
-    end_date: str = None,
+    start_date: Union[str, datetime] = None, 
+    end_date: Union[str, datetime] = None,
     **kwargs
 ) -> None:
     """
@@ -159,35 +165,40 @@ def _plot_yearly_data(
     Returns:
         Interactive plotly chart: .html file
     """
-    num_indices = len(show_advanced)
+    row_heights = [1.0] # default row height
+    num_indices = 0 # default number of indices
+    r_price = 1 # default row of price
 
-    if num_indices == 3:
-        r_price = 1
-        r_volume = 2
-        r_macd = 3
-        r_rsi = 4
-        w_macd = 1
-        w_rsi = 1
-        row_heights = [0.4, 0.2, 0.15, 0.15]
+    if show_advanced:
+        num_indices = len(show_advanced)
 
-    if 'macd' not in show_advanced:
-        r_price = 1
-        r_volume = 2
-        r_rsi = 3
-        w_rsi = 1
-        row_heights = [0.6, 0.2, 0.2]
+        if num_indices == 3:
+            r_price = 1
+            r_volume = 2
+            r_macd = 3
+            r_rsi = 4
+            w_macd = 1
+            w_rsi = 1
+            row_heights = [0.4, 0.2, 0.15, 0.15]
 
-    if 'rsi' not in show_advanced:
-        r_price = 1
-        r_volume = 2
-        r_macd = 3
-        w_macd = 1
-        row_heights = [0.6, 0.2, 0.2]
+        if 'macd' not in show_advanced:
+            r_price = 1
+            r_volume = 2
+            r_rsi = 3
+            w_rsi = 1
+            row_heights = [0.6, 0.2, 0.2]
 
-    if ('rsi' not in show_advanced) and ('macd' not in show_advanced):
-        r_price = 1
-        r_volume = 2
-        row_heights = [0.7, 0.3]
+        if 'rsi' not in show_advanced:
+            r_price = 1
+            r_volume = 2
+            r_macd = 3
+            w_macd = 1
+            row_heights = [0.6, 0.2, 0.2]
+
+        if ('rsi' not in show_advanced) and ('macd' not in show_advanced):
+            r_price = 1
+            r_volume = 2
+            row_heights = [0.7, 0.3]
 
     # Create figure with secondary y-axis
     fig = make_subplots(
@@ -220,8 +231,7 @@ def _plot_yearly_data(
         row=r_price, col=1
     )
 
-    if WMA:
-        # if WMA is int, convert it to list
+    if WMA: # if WMA is int, convert it to list
         if isinstance(WMA, int):
             WMA = [WMA]
         # Add WMA to the plot
@@ -235,9 +245,16 @@ def _plot_yearly_data(
                     line=dict(color='grey', width=2, dash='dash')
                 )
             )
-    
+    """
+    Logic to compute MACD, RSI if the user want to show advanced plot
+    The plot will be displayed in the following order:
+        - Price (Candle stick chart -> default)
+        - Volume (Bar chart -> if the user want to show volume)
+        - MACD (Line chart -> if the user want to show MACD)
+        - RSI (Line chart -> if the user want to show RSI)
+    """
     # Compute MACD:
-    if 'macd' in show_advanced:
+    if show_advanced and 'macd' in show_advanced:
         # refers to: https://www.alpharithms.com/calculate-macd-python-272222/
         # Get the 26-day EMA of the closing price
         k = data['close'].ewm(span=12, adjust=False, min_periods=12).mean()
@@ -288,7 +305,7 @@ def _plot_yearly_data(
         )
 
     # Compute RSI:
-    if 'rsi' in show_advanced:
+    if show_advanced and 'rsi' in show_advanced:
         delta = data['close'].diff()
         up = delta.clip(lower=0)
         down = -1*delta.clip(upper=0)
@@ -303,20 +320,20 @@ def _plot_yearly_data(
                 y=data['RSI'], 
                 name='RSI', 
                 line=dict(width=w_rsi)
-              ),
+            ),
             row=r_rsi, col=1
         )
 
         fig.add_hline(y=70, line_dash="dot", row=r_rsi, col="all",
-                  annotation_text="70%", 
-                  annotation_position="bottom right")
+                annotation_text="70%", 
+                annotation_position="bottom right")
 
         fig.add_hline(y=30, line_dash="dot", row=r_rsi, col="all",
-                  annotation_text="30%", 
-                  annotation_position="bottom right")
+                annotation_text="30%", 
+                annotation_position="bottom right")
 
     # show volume    
-    if 'volume' in show_advanced:
+    if show_advanced and 'volume' in show_advanced:
         # Calculate price changes
         data['PriceChange'] = data['close'] - data['open']
         data['VolumeColor'] = '#00A86B'  # Default color is 00A86B
@@ -368,8 +385,8 @@ def plot_data(
     title: str = None,
     WMA: int = None,
     show_advanced: List[str] = None,
-    start_date: str = None, 
-    end_date: str = None,
+    start_date: Union[str, datetime] = None, 
+    end_date: Union[str, datetime] = None,
     **kwargs
 ) -> None:
     """
@@ -384,7 +401,7 @@ def plot_data(
         title: (str) -> Title of the plot
         WMA: (int or list) -> List of WMA (Ex. [10, 20, 30]),
                             User can input only one WMA (Ex. 10) or a list of WMA (Ex. [10, 20, 30])
-        show_vol: (bool) -> True if user want to show the volume of the stock, otherwise False
+        show_advanced: (list) -> List of advanced plot (Ex. ['macd', 'rsi', 'volume'])
         start_date: (str) -> Start date of the plot
         end_date: (str) -> End date of the plot
     Returns:
@@ -400,8 +417,8 @@ def plot_data(
             data_params = {
                 'symbol': symbol,
                 'resolution': '1',
-                'from': int(date_string_to_timestamp_utc7(start_date)),
-                'to': int(date_string_to_timestamp_utc7(end_date)),
+                'from': int(date_string_to_timestamp_utc7(start_date)) if isinstance(start_date, str) else datetime_to_timestamp_utc7(start_date),
+                'to': int(date_string_to_timestamp_utc7(end_date)) if isinstance(end_date, str) else datetime_to_timestamp_utc7(end_date)
             }
             # get data from VNDIRECT API
             data = data_loader.get_data(data_params) 
@@ -425,8 +442,8 @@ def plot_data(
             data_params = {
                 'symbol': symbol,
                 'resolution': 'D',
-                'from': int(date_string_to_timestamp_utc7(start_date)),
-                'to': int(date_string_to_timestamp_utc7(end_date)),
+                'from': int(date_string_to_timestamp_utc7(start_date)) if isinstance(start_date, str) else datetime_to_timestamp_utc7(start_date),
+                'to': int(date_string_to_timestamp_utc7(end_date)) if isinstance(end_date, str) else datetime_to_timestamp_utc7(end_date)
             }
             data = data_loader.get_data(data_params) # get data from VNDIRECT API
             _plot_yearly_data(
@@ -438,9 +455,23 @@ def plot_data(
                 start_date=start_date, 
                 end_date=end_date
             )
+    else:
+        index = data['Date']
+        if not isinstance(index, pd.core.indexes.datetimes.DatetimeIndex):
+            raise IndexError('index of dataframe must be DatetimeIndex!')
+        
+        #TODO: write function to plot the whole dataframe
+        pass
+        
 
 
 if __name__ =="__main__":
-    plot_data(data='VNM', show_advanced=['volume'], start_date='2023-05-04', end_date='2023-10-07')
+    plot_data(data='VNM', start_date='2021-08-11', end_date='2021-10-13')
+    plot_data(data='VNM', start_date=datetime.now() - timedelta(days=5), end_date=datetime.now())
+    plot_data(data='VNM', show_advanced=['volume'], start_date=datetime.now() - timedelta(days=30), end_date=datetime.now())
+    plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume'], start_date=datetime.now() - timedelta(days=365), end_date=datetime.now())
+    plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-08-01', end_date='2023-10-13')
+    plot_data(data='VNM', title='test plot', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-04-01', end_date='2023-10-13')    
+    plot_data(data='VNM', show_advanced=['volume'], start_date='2023-10-11', end_date='2023-10-13')
 
 

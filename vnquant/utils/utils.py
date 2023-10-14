@@ -1,5 +1,6 @@
 # Copyright (c) general_backbone. All rights reserved.
 from datetime import datetime
+import pytz
 import re
 import random
 import requests
@@ -20,16 +21,6 @@ def convert_date(text, date_type = '%Y-%m-%d'):
 
 def convert_text_dateformat(text, origin_type = '%Y-%m-%d', new_type = '%Y-%m-%d'):
     return convert_date(text, origin_type).strftime(new_type)
-
-def date_string_to_timestamp_utc7(date_string):
-    try:
-        date_obj = parse(date_string)
-        utc_offset = timedelta(hours=7)
-        timestamp_utc7 = (date_obj - utc_offset).timestamp()
-        return timestamp_utc7
-    except (ValueError, OverflowError):
-        return None  # Handle invalid date strings
-    
 
 def split_change_col(text):
     return re.sub(r'[\(|\)%]', '', text).strip().split()
@@ -186,7 +177,12 @@ def date_difference_description(start_date: datetime, end_date: datetime) -> str
     returns:
         str -> time marks
     """
-    difference = relativedelta(convert_date(start_date), convert_date(end_date))
+    if isinstance(start_date, str):
+        start_date = convert_date(start_date)
+    if isinstance(end_date, str):
+        end_date = convert_date(end_date)
+
+    difference = relativedelta(start_date, end_date)
     
     if difference.years == 0 and difference.months == 0 and difference.days == 0:
         return 'hours'
@@ -197,5 +193,34 @@ def date_difference_description(start_date: datetime, end_date: datetime) -> str
     else:
         return 'years'
     
+
+def datetime_to_timestamp_utc7(dt):
+    # Create a timezone object for UTC+7
+    utc7 = pytz.timezone('Asia/Bangkok')
+
+    # Localize the datetime to UTC and then convert it to UTC+7
+    dt_utc = pytz.utc.localize(dt)
+    dt_utc7 = dt_utc.astimezone(utc7)
+
+    # Convert the localized datetime to a Unix timestamp
+    timestamp_utc7 = (dt_utc7 - datetime(1970, 1, 1, tzinfo=utc7)).total_seconds()
+
+    return int(timestamp_utc7)
+
+
+def date_string_to_timestamp_utc7(date_string):
+    try:
+        date_obj = parse(date_string)
+        utc_offset = timedelta(hours=7)
+        timestamp_utc7 = (date_obj - utc_offset).timestamp()
+        return timestamp_utc7
+    except (ValueError, OverflowError):
+        return None  # Handle invalid date strings
+
+    
 if __name__ == "__main__":
-    date_difference_description('2021-01-02', '2021-01-01')
+    print(date_difference_description(datetime.now(), datetime.now() - timedelta(days=1)))
+    # Example usage:
+    datetime_obj = datetime.now()  # Replace this with your datetime
+    timestamp = datetime_to_timestamp_utc7(datetime_obj)
+    print(f"UTC+7 Timestamp: {timestamp}")
