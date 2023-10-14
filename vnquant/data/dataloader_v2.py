@@ -105,4 +105,4 @@ if __name__ == "__main__":
     }
     data = df.get_data(params=params)
     print(data)
-#     data.to_csv('stock_data.csv', index=False)
+
