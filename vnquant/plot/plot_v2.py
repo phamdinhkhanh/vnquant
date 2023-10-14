@@ -4,7 +4,8 @@
 # date: 1st Jan 2023
 # ---------------------------------------------------------------------------
 #TODO: 1. Add plot for dataframe also (rase exception if the input is dataframe)
-#TODO: 2. Add plot for multiple stocks
+#TODO: 2. Add color different for each WMA
+#TODO: 3. Add show advanced plot (with MACD, RSI, Bollinger band, ...)
 
 import pandas as pd
 from vnquant.data import VND_OHLCV
