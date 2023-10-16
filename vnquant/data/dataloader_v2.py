@@ -9,7 +9,6 @@ import pandas as pd
 from datetime import datetime, timedelta
 import pytz
 
-
 class VND_OHLCV(object):
     """
     A class to visualize stock data.
@@ -29,7 +28,6 @@ class VND_OHLCV(object):
             end_date: (datetime) -> End date.
         """
         self.symbol = symbol
-        # self.resolution = resolution
         self.start_date = start_date
         self.end_date = end_date
         self.VND_API = r'https://dchart-api.vndirect.com.vn/dchart/history'
@@ -50,9 +48,9 @@ class VND_OHLCV(object):
 
     def __str__(self) -> str:
         return f'''StockVisualization(
-            symbol={self.symbol}, resolution={self.resolution}, 
-            start_date={self.start_date}, end_date={self.end_date}
-        )'''
+                    symbol={self.symbol}, resolution={self.resolution}, 
+                    start_date={self.start_date}, end_date={self.end_date}
+                )'''
 
 
     def set_params(self, params: dict) -> None:
@@ -80,7 +78,6 @@ class VND_OHLCV(object):
         columns_to_convert = ['o', 'c', 'h', 'l']
         for column in columns_to_convert:
             data[column] = data[column].astype(float) * 1000
-        # data = data.set_index('datetime')
         data = data.drop(['t', 's'], axis=1)
         data.rename(
             columns = {

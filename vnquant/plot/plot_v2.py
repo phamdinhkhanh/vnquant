@@ -45,8 +45,8 @@ def _plot_daily_data(
     Returns:
         Interactive plotly chart: .html file
     """
-    row_heights = [1.0] # default row height
-    num_indices = 0 # default number of indices
+    row_heights = [1.0]     # default row height
+    num_indices = 0         # default number of indices
     if show_vol:
         num_indices = 1
         row_heights = [0.8, 0.2]
@@ -87,17 +87,15 @@ def _plot_daily_data(
 
     # show volume if the user want to (default show_vol value is False)
     if show_vol:
-        # Calculate price changes
         data['PriceChange'] = data['close'] - data['open']
-        data['VolumeColor'] = '#00A86B'  # Default color is 00A86B
+        data['VolumeColor'] = '#00A86B'     # Default color is 00A86B
         data.loc[data['PriceChange'] < 0, 'VolumeColor'] = '#FF2400'
-        # Add volume bars to the figure
         fig.append_trace(
             go.Bar(
                 x=data['Date'],
                 y=data['volume'],
                 name='Volume',
-                yaxis='y2',  # Use a second y-axis for volume
+                yaxis='y2',     # Use a second y-axis for volume
                 marker=dict(color=data['VolumeColor'])
             ),
             row=2, col=1
@@ -112,13 +110,13 @@ def _plot_daily_data(
                 dict(count=1, label="1D", step="day", stepmode="backward"),
                 dict(step="all")
             ]),
-            bgcolor='lightgrey',  # Set the background color of the button area
-            activecolor='blue'  # Set the color of the active button
+            bgcolor='lightgrey',    # Set the background color of the button area
+            activecolor='blue'      # Set the color of the active button
         ),
         rangebreaks=[
-            dict(bounds=["sat", "mon"]),  # hide weekends, eg. hide sat to before mon
-            dict(bounds=[14.30, 9.25], pattern="hour"),  # hide hours outside of 9.30am-3pm
-            dict(bounds=[11.30, 13], pattern="hour"),  # hide hours outside of 9.30am-4pm
+            dict(bounds=["sat", "mon"]),                   # hide weekends, eg. hide sat to before mon
+            dict(bounds=[14.30, 9.25], pattern="hour"),    # hide hours outside of 9.30am-3pm
+            dict(bounds=[11.30, 13], pattern="hour"),      # hide hours outside of 9.30am-4pm
         ]
     )
 
@@ -165,9 +163,9 @@ def _plot_yearly_data(
     Returns:
         Interactive plotly chart: .html file
     """
-    row_heights = [1.0] # default row height
-    num_indices = 0 # default number of indices
-    r_price = 1 # default row of price
+    row_heights = [1.0]     # default row height
+    num_indices = 0         # default number of indices
+    r_price = 1             # default row of price
 
     if show_advanced:
         num_indices = len(show_advanced)
@@ -234,7 +232,6 @@ def _plot_yearly_data(
     if WMA: # if WMA is int, convert it to list
         if isinstance(WMA, int):
             WMA = [WMA]
-        # Add WMA to the plot
         for wma in WMA:
             data[f'{wma}wma'] = data['close'].rolling(window=wma).mean()
             fig.add_trace(
@@ -256,23 +253,17 @@ def _plot_yearly_data(
     # Compute MACD:
     if show_advanced and 'macd' in show_advanced:
         # refers to: https://www.alpharithms.com/calculate-macd-python-272222/
-        # Get the 26-day EMA of the closing price
-        k = data['close'].ewm(span=12, adjust=False, min_periods=12).mean()
-        # Get the 12-day EMA of the closing price
-        d = data['close'].ewm(span=26, adjust=False, min_periods=26).mean()
-        # Subtract the 26-day EMA from the 12-Day EMA to get the MACD
-        macd = k - d
-        # Get the 9-Day EMA of the MACD for the Trigger line
-        macd_s = macd.ewm(span=9, adjust=False, min_periods=9).mean()
-        # Calculate the difference between the MACD - Trigger for the Convergence/Divergence value
-        macd_h = macd - macd_s
-        # Add all of our new values for the MACD to the dataframe
-        data['macd'] = data.index.map(macd)
+        k = data['close'].ewm(span=12, adjust=False, min_periods=12).mean()     # Get the 26-day EMA of the closing price
+        d = data['close'].ewm(span=26, adjust=False, min_periods=26).mean()     # Get the 12-day EMA of the closing price
+        macd = k - d                                                            # Subtract the 26-day EMA from the 12-Day EMA to get the MACD
+        macd_s = macd.ewm(span=9, adjust=False, min_periods=9).mean()           # Get the 9-Day EMA of the MACD for the Trigger line
+        macd_h = macd - macd_s                                                  # Calculate the difference between the MACD - Trigger for the Convergence/Divergence value
+        data['macd'] = data.index.map(macd)                                     # Add all of our new values for the MACD to the dataframe
         data['macd_h'] = data.index.map(macd_h)
         data['macd_s'] = data.index.map(macd_s)
         # Fast Signal (%k)
         fig.append_trace(
-            go.Scatter(
+            go.Scatter( 
                 x=data.index,
                 y=data['macd'],
                 line=dict(color='#ff9900', width=w_macd),
@@ -294,7 +285,6 @@ def _plot_yearly_data(
         )
         # Colorize the histogram values
         colors = np.where(data['macd_h'] < 0, '#000', '#ff9900')
-        # Plot the histogram
         fig.append_trace(
             go.Bar(
                 x=data.index,
@@ -336,7 +326,7 @@ def _plot_yearly_data(
     if show_advanced and 'volume' in show_advanced:
         # Calculate price changes
         data['PriceChange'] = data['close'] - data['open']
-        data['VolumeColor'] = '#00A86B'  # Default color is 00A86B
+        data['VolumeColor'] = '#00A86B'     # Default color is 00A86B
         data.loc[data['PriceChange'] < 0, 'VolumeColor'] = '#FF2400'
         # Add volume bars to the figure
         fig.append_trace(
@@ -344,7 +334,7 @@ def _plot_yearly_data(
                 x=data['Date'],
                 y=data['volume'],
                 name='Volume',
-                yaxis='y2',  # Use a second y-axis for volume
+                yaxis='y2',     # Use a second y-axis for volume
                 marker=dict(color=data['VolumeColor'])
             ),
             row=r_volume, col=1
@@ -359,11 +349,11 @@ def _plot_yearly_data(
                 dict(count=1, label="1Y", step="year", stepmode="backward"),
                 dict(step="all")
             ]),
-            bgcolor='lightgrey',  # Set the background color of the button area
-            activecolor='blue'  # Set the color of the active button
+            bgcolor='lightgrey',     # Set the background color of the button area
+            activecolor='blue'       # Set the color of the active button
         ),
         rangebreaks=[
-            dict(bounds=["sat", "mon"]),  # hide weekends, eg. hide sat to before mon
+            dict(bounds=["sat", "mon"]),     # hide weekends, eg. hide sat to before mon
         ]
     )
 
@@ -391,7 +381,10 @@ def plot_data(
 ) -> None:
     """
     Plot a specific stock data from user input.
-    The data will be requested from VNDIRECT API (using VND_OHLCV class)
+    The data argument can be a stock symbol (Ex. VNM, VCB, ...) or a DataFrame containing stock data.
+    If the data is a specific stock symbol, the dataframe will be requested from VNDIRECT API (using VND_OHLCV class)
+    If the data is a dataframe, it must contain these columns: ['Date', 'open', 'high', 'low', 'close'], 'volume' is optional
+    If data is dataframe and user want to display volume, the dataframe must contain 'volume' column.
     User will call this function to plot the stock data.
     If the time period is less than a month, the plot type will be daily candle stick chart.
     If the time period is more than a month, the plot type will be yearly candle stick chart.
@@ -409,18 +402,18 @@ def plot_data(
     """
     if isinstance(data, str):
         symbol = data
-        data_loader = VND_OHLCV()
+        data_loader = VND_OHLCV()     
+        time_mark = date_difference_description(end_date, start_date) # Classify time periods to decide the resolution -> daily or yearly type of plot
+        start_date_ = int(date_string_to_timestamp_utc7(start_date)) if isinstance(start_date, str) else datetime_to_timestamp_utc7(start_date) # convert start_date to timestamp
+        end_date_ = int(date_string_to_timestamp_utc7(end_date)) if isinstance(end_date, str) else datetime_to_timestamp_utc7(end_date)         #convert end_date to timestamp
 
-        # Classify time periods to decide the resolution -> daily or yearly type of plot
-        time_mark = date_difference_description(end_date, start_date)
         if time_mark == 'hours' or time_mark == 'days':
             data_params = {
                 'symbol': symbol,
                 'resolution': '1',
-                'from': int(date_string_to_timestamp_utc7(start_date)) if isinstance(start_date, str) else datetime_to_timestamp_utc7(start_date),
-                'to': int(date_string_to_timestamp_utc7(end_date)) if isinstance(end_date, str) else datetime_to_timestamp_utc7(end_date)
+                'from': start_date_,
+                'to': end_date_
             }
-            # get data from VNDIRECT API
             data = data_loader.get_data(data_params) 
             show_vol = False
             if show_advanced:
@@ -442,10 +435,10 @@ def plot_data(
             data_params = {
                 'symbol': symbol,
                 'resolution': 'D',
-                'from': int(date_string_to_timestamp_utc7(start_date)) if isinstance(start_date, str) else datetime_to_timestamp_utc7(start_date),
-                'to': int(date_string_to_timestamp_utc7(end_date)) if isinstance(end_date, str) else datetime_to_timestamp_utc7(end_date)
+                'from': start_date_,
+                'to': end_date_
             }
-            data = data_loader.get_data(data_params) # get data from VNDIRECT API
+            data = data_loader.get_data(data_params)     # get data from VNDIRECT API
             _plot_yearly_data(
                 data=data, 
                 title=title, 
@@ -458,20 +451,49 @@ def plot_data(
     else:
         index = data['Date']
         if not isinstance(index, pd.core.indexes.datetimes.DatetimeIndex):
-            raise IndexError('index of dataframe must be DatetimeIndex!')
+            raise IndexError('Index of dataframe must be DatetimeIndex!')
+        if not start_date:
+            start_date = min(index)
+        if not end_date:
+            end_date = max(index)
+
+        time_mark = date_difference_description(end_date, start_date)
+        if time_mark == 'hours' or 'days':
+            show_vol = False
+            if show_advanced:
+                show_vol = True
+                if 'volume' not in show_advanced:
+                    raise Exception('Due to the short time period, this plot can only show volume.')
+                if 'volume' not in data.columns:
+                    raise Exception('The input dataframe must contains volume feature.')
+
+            _plot_daily_data(
+                data=data, 
+                title=title, 
+                WMA=WMA,
+                show_vol=show_vol,
+                start_date=start_date, 
+                end_date=end_date
+            )
         
-        #TODO: write function to plot the whole dataframe
-        pass
-        
+        else:
+            _plot_yearly_data(
+                data=data, 
+                title=title, 
+                WMA=WMA,
+                show_advanced=show_advanced,
+                start_date=start_date, 
+                end_date=end_date
+            )
 
 
 if __name__ =="__main__":
-    plot_data(data='VNM', start_date='2021-08-11', end_date='2021-10-13')
-    plot_data(data='VNM', start_date=datetime.now() - timedelta(days=5), end_date=datetime.now())
-    plot_data(data='VNM', show_advanced=['volume'], start_date=datetime.now() - timedelta(days=30), end_date=datetime.now())
-    plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume'], start_date=datetime.now() - timedelta(days=365), end_date=datetime.now())
-    plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-08-01', end_date='2023-10-13')
-    plot_data(data='VNM', title='test plot', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-04-01', end_date='2023-10-13')    
+    # plot_data(data='VNM', start_date='2021-08-11', end_date='2021-10-13')
+    # plot_data(data='VNM', start_date=datetime.now() - timedelta(days=5), end_date=datetime.now())
+    # plot_data(data='VNM', show_advanced=['volume'], start_date=datetime.now() - timedelta(days=30), end_date=datetime.now())
+    # plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume'], start_date=datetime.now() - timedelta(days=365), end_date=datetime.now())
+    # plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-08-01', end_date='2023-10-13')
+    # plot_data(data='VNM', title='test plot', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-04-01', end_date='2023-10-13')    
     plot_data(data='VNM', show_advanced=['volume'], start_date='2023-10-11', end_date='2023-10-13')
 
 
