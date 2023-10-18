@@ -10,10 +10,12 @@ import pandas as pd
 import numpy as np
 from typing import List, Union
 from datetime import datetime, timedelta
-from vnquant.data import VND_OHLCV
-from vnquant.utils.utils import date_difference_description, date_string_to_timestamp_utc7, datetime_to_timestamp_utc7
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from vnquant.data import VND_OHLCV
+from vnquant.utils.utils import date_difference_description, date_string_to_timestamp_utc7
+from vnquant.utils.utils import datetime_to_timestamp_utc7, is_directory
+from vnquant.utils.exceptions import ShortTimePeriod
 
 
 def _plot_daily_data(
@@ -52,7 +54,8 @@ def _plot_daily_data(
         row_heights = [0.8, 0.2]
 
     if WMA:
-        raise Exception('Time period is too short to display weekly moving average.')
+        raise ShortTimePeriod('Time period is too short to display weekly moving average.')
+    
     # Create figure with secondary y-axis
     fig = make_subplots(
         rows=num_indices+1, 
@@ -381,7 +384,7 @@ def plot_data(
 ) -> None:
     """
     Plot a specific stock data from user input.
-    The data argument can be a stock symbol (Ex. VNM, VCB, ...) or a DataFrame containing stock data.
+    The data argument can be a stock symbol (Ex. VNM, VCB, ...) or a DataFrame containing stock data or a directory to the dataframe.
     If the data is a specific stock symbol, the dataframe will be requested from VNDIRECT API (using VND_OHLCV class)
     If the data is a dataframe, it must contain these columns: ['Date', 'open', 'high', 'low', 'close'], 'volume' is optional
     If data is dataframe and user want to display volume, the dataframe must contain 'volume' column.
@@ -400,7 +403,7 @@ def plot_data(
     Returns:
         Interactive plotly chart: .html file
     """
-    if isinstance(data, str):
+    if not isinstance(data, pd.DataFrame) and not is_directory(data):
         symbol = data
         data_loader = VND_OHLCV()     
         time_mark = date_difference_description(end_date, start_date) # Classify time periods to decide the resolution -> daily or yearly type of plot
@@ -418,8 +421,7 @@ def plot_data(
             show_vol = False
             if show_advanced:
                 show_vol = True
-                if 'volume' not in show_advanced:
-                    raise Exception('Due to the short time period, this plot can only show volume.')
+                assert 'volume' in show_advanced, 'The input dataframe must contains volume feature.'
 
             _plot_daily_data(
                 data=data, 
@@ -449,23 +451,34 @@ def plot_data(
                 end_date=end_date
             )
     else:
+        # check if the data is a directory or not
+        if is_directory(data):
+            data = pd.read_csv(data)
+
+        """
+        Have to make sure that if the user input start_date or end_date or both,
+        AssertionError will be raised if the user input start_date or end_date 
+        is not in the dataframe index.
+        """
+
         index = data['Date']
-        if not isinstance(index, pd.core.indexes.datetimes.DatetimeIndex):
-            raise IndexError('Index of dataframe must be DatetimeIndex!')
         if not start_date:
             start_date = min(index)
+        else:
+            assert start_date in index, 'start_date must be in the dataframe index.'  # start_date = min(start_date, min(index))
         if not end_date:
             end_date = max(index)
+        else:
+            assert end_date in index, 'end_date must be in the dataframe index.'  # end_date = max(end_date, max(index))
 
-        time_mark = date_difference_description(end_date, start_date)
-        if time_mark == 'hours' or 'days':
-            show_vol = False
-            if show_advanced:
-                show_vol = True
-                if 'volume' not in show_advanced:
-                    raise Exception('Due to the short time period, this plot can only show volume.')
-                if 'volume' not in data.columns:
-                    raise Exception('The input dataframe must contains volume feature.')
+        time_mark = date_difference_description(end_date.split(' ')[0], start_date.split(' ')[0])
+        if time_mark == 'hours' or time_mark == 'days':
+            show_vol = True
+            if not show_advanced:
+                show_vol = False
+            else:
+                assert 'volume' in show_advanced, 'The input dataframe must contains volume feature.'
+                assert 'volume' in data.columns, 'The input dataframe must contains volume feature.'
 
             _plot_daily_data(
                 data=data, 
@@ -482,18 +495,27 @@ def plot_data(
                 title=title, 
                 WMA=WMA,
                 show_advanced=show_advanced,
-                start_date=start_date, 
-                end_date=end_date
+                start_date=start_date.split(' ')[0], 
+                end_date=end_date.split(' ')[0]
             )
 
 
+
 if __name__ =="__main__":
+    # # plot data based on stock symbol
     # plot_data(data='VNM', start_date='2021-08-11', end_date='2021-10-13')
-    # plot_data(data='VNM', start_date=datetime.now() - timedelta(days=5), end_date=datetime.now())
+    # plot_data(data='VNM', start_date=datetime.now()-timedelta(days=5), end_date=datetime.now())
     # plot_data(data='VNM', show_advanced=['volume'], start_date=datetime.now() - timedelta(days=30), end_date=datetime.now())
     # plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume'], start_date=datetime.now() - timedelta(days=365), end_date=datetime.now())
     # plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-08-01', end_date='2023-10-13')
     # plot_data(data='VNM', title='test plot', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-04-01', end_date='2023-10-13')    
-    plot_data(data='VNM', show_advanced=['volume'], start_date='2023-10-11', end_date='2023-10-13')
+    # plot_data(data='VNM', show_advanced=['volume'], start_date='2023-10-11', end_date='2023-10-13')
 
+    # # # plot data based on dataframe
+    # df = pd.read_csv('data.csv')
+    # plot_data(data=df, show_advanced=['volume'], start_date='2023-10-20')
+
+    # # plot data based on directory
+    plot_data(r'C:\Users\binh.truong\Code\vnquant\data.csv')
+    # print(is_directory(r'C:\Users\binh.truong\Code\vnquant\data.csv'))
 
