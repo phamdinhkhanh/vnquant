@@ -1,0 +1,2 @@
+class ShortTimePeriod(Exception):
+    pass
