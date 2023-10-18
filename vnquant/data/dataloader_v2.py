@@ -78,6 +78,7 @@ class VND_OHLCV(object):
         columns_to_convert = ['o', 'c', 'h', 'l']
         for column in columns_to_convert:
             data[column] = data[column].astype(float) * 1000
+        # data.set_index(column='Date')
         data = data.drop(['t', 's'], axis=1)
         data.rename(
             columns = {
@@ -96,10 +97,10 @@ if __name__ == "__main__":
     df = VND_OHLCV('HPG', datetime.now(), datetime.now()-timedelta(days=5))
     params = {
         'symbol': 'VNM',
-        'resolution': '1',
+        'resolution': 'D',
         'to': int(datetime.now().timestamp()),
         'from': int((datetime.now() - timedelta(days=365)).timestamp()),
     }
     data = df.get_data(params=params)
-    print(data)
+    data.to_csv('data.csv', index=False)
 

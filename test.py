@@ -33,9 +33,25 @@
 # import vnquant.plot as pl
 # pl.vnquant_candle_stick_source('VND', '2019-09-01', '2019-11-01', show_vol=True)
 
-import vnquant.plot as pl2
-pl2.plot_data('VND', '2022-09-01', '2023-11-01')
 
-# from vnquant import utils
-# print(utils._isOHLC)
+import vnquant.plot as pl2
+import pandas as pd
+from datetime import datetime, timedelta
+
+# plot data based on stock symbol
+pl2.plot_data(data='VNM', start_date='2021-08-11', end_date='2021-10-13')
+pl2.plot_data(data='VNM', start_date=datetime.now()-timedelta(days=5), end_date=datetime.now())
+pl2.plot_data(data='VNM', show_advanced=['volume'], start_date=datetime.now()-timedelta(days=1), end_date=datetime.now())
+pl2.plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume'], start_date=datetime.now() - timedelta(days=365), end_date=datetime.now())
+pl2.plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-08-01', end_date='2023-10-13')
+pl2.plot_data(data='VNM', title='test plot', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-04-01', end_date='2023-10-13')    
+pl2.plot_data(data='VNM', show_advanced=['volume'], start_date='2023-10-11', end_date='2023-10-13')
+
+# # plot data based on dataframe
+df = pd.read_csv(r'C:\Users\binh.truong\Code\vnquant\data.csv')
+pl2.plot_data(data=df, show_advanced=['volume', 'macd', 'rsi'])
+
+# plot data based on directory
+pl2.plot_data(r'C:\Users\binh.truong\Code\vnquant\data.csv')
+
 

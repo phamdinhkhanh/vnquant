@@ -452,7 +452,7 @@ def plot_data(
             )
     else:
         # check if the data is a directory or not
-        if is_directory(data):
+        if not isinstance(data, pd.DataFrame):
             data = pd.read_csv(data)
 
         """
@@ -498,24 +498,4 @@ def plot_data(
                 start_date=start_date.split(' ')[0], 
                 end_date=end_date.split(' ')[0]
             )
-
-
-
-if __name__ =="__main__":
-    # # plot data based on stock symbol
-    # plot_data(data='VNM', start_date='2021-08-11', end_date='2021-10-13')
-    # plot_data(data='VNM', start_date=datetime.now()-timedelta(days=5), end_date=datetime.now())
-    # plot_data(data='VNM', show_advanced=['volume'], start_date=datetime.now() - timedelta(days=30), end_date=datetime.now())
-    # plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume'], start_date=datetime.now() - timedelta(days=365), end_date=datetime.now())
-    # plot_data(data='VNM', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-08-01', end_date='2023-10-13')
-    # plot_data(data='VNM', title='test plot', WMA=[5, 10], show_advanced=['volume', 'macd'], start_date='2023-04-01', end_date='2023-10-13')    
-    # plot_data(data='VNM', show_advanced=['volume'], start_date='2023-10-11', end_date='2023-10-13')
-
-    # # # plot data based on dataframe
-    # df = pd.read_csv('data.csv')
-    # plot_data(data=df, show_advanced=['volume'], start_date='2023-10-20')
-
-    # # plot data based on directory
-    plot_data(r'C:\Users\binh.truong\Code\vnquant\data.csv')
-    # print(is_directory(r'C:\Users\binh.truong\Code\vnquant\data.csv'))
 
