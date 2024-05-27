@@ -2,14 +2,10 @@
 
 <img src="./vnquant/imgs/stock_1.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
-## 0. NOTE
-Note: Currently, prices on VnDirect source are supported again. There are two options data source for you:
-
-* cafef: Set data_source='CAFE'
-* vndirect: set data_source='VND'
 
 ## 1. Introduction
 This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.
+
 ## 2. Setting:
 
 ### 2.1. Setup on local machine
@@ -117,12 +113,12 @@ dt.DataLoader(symbols="VND",
 ```
 **Arguments**
 
-* `symbols`: a string or list of strings indicate the stock names. The stock symbols in regular include 3 upper case letters except several special index such as: `E1VFVN30, VN100-INDEX, HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` in case your `data_source = "cafe"` and `VN30, HNX30, UPCOM` in case your `data_source = "vnd"`.
-* `start`: start date time with format `yyyy-mm-dd`.
-* `end`: end date time with format `yyyy-mm-dd`.
-* `minimal`: default is True, we only clone `high, low, open, close, adjust price, volume` of stocks. In contrast, more information is added,
-for example `volumn_reconcile, volumn_match,...`
-* `data_source`: the source to clone the stock prices. Currently, there two main resources are `Vndirect` and `Cafef` showed by `data_source = vnd` and `cafe`, respectively. The default is `vnd`.
+* `symbols` (Union[str, list]): A single stock symbol as a string or multiple stock symbols as a list of strings. The stock symbols regularly include 3 upper case letters except several special index such as: `E1VFVN30, VN100-INDEX, HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` in case your `data_source = "cafe"` and `VN30, HNX30, UPCOM` in case your `data_source = "vnd"`.
+* `start` (Optional[Union[str, datetime]], default=None): The start date for the data. Can be a string in the format 'YYYY-MM-DD' or a datetime object.
+* `end` (Optional[Union[str, datetime]], default=None): The end date for the data. Can be a string in the format 'YYYY-MM-DD' or a datetime object.
+* `data_source` (str, default='CAFE'): The data source to be used for downloading stock data. Currently supports 'CAFE' and 'VND'.
+* `minimal` (bool, default=True): If True, returns a minimal set of columns. If False, returns all available columns.
+* `table_style` (str, default='levels'): The style of the returned table. Options are 'levels', 'prefix', and 'stack'.
 
 ### 4.1. Clone one stock:
 ```{python}

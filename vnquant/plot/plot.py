@@ -1,5 +1,4 @@
-# Copyright (c) general_backbone. All rights reserved.
-from vnquant.data import DataLoader
+from vnquant.data.dataloader import DataLoader
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import vnquant.utils.utils as utils
@@ -82,10 +81,9 @@ def vnquant_candle_stick_source(
         )
     '''
     
-    loader = DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source)
+    loader = DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source, table_style='levels')
     data = loader.download()
-    symbol = list(data.columns.levels[1])[0]
-    data.columns = ['high', 'low', 'open', 'close', 'adjust', 'volume']
+    data = data[['high', 'low', 'open', 'close', 'adjust', 'volume']]
     title = '{} stock price & volume from {} to {}'.format(symbol, start_date, end_date)
     num_indices = len(show_advanced)
 

@@ -153,3 +153,15 @@ class FinanceLoader():
 
         df.set_index('index', inplace=True)
         return df
+    
+
+if __name__ == "__main__":
+    loader = FinanceLoader('VNM', '2018-01-01', '2019-01-01')
+    # index = loader.get_basic_index()
+    report = loader.get_finan_report()
+    # business = loader.get_business_report()
+    # cashflow = loader.get_cashflow_report()
+    # print(index)
+    print(report)
+    # print(business)
+    # print(cashflow)
