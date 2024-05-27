@@ -1,10 +1,6 @@
-﻿# Copyright (c) general_backbone. All rights reserved.
-# from .Plot import _vnquant_candle_stick_source, vnquant_candle_stick, vnquant_candle_stick_source
-from .plot_v2 import plot_data
+﻿# Copyright (c) vnquant. All rights reserved.
+from .plot import vnquant_candle_stick_source, vnquant_candle_stick
 
 __all__ = [
-    # '_vnquant_candle_stick_source', 
-    # 'vnquant_candle_stick', 
-    # 'vnquant_candle_stick_source', 
-    'plot_data'
+    'vnquant_candle_stick', 'vnquant_candle_stick_source'
 ]

@@ -97,13 +97,32 @@ def get_ind_class(
     return resp.json()
 
 
+def _convert_change_cafe(text: str):
+    pattern = r'([-+]?\d*\.\d+|\d+)\s*\(\s*([-+]?\d*\.\d+|\d+)\s*%\s*\)'
+
+    # Use re.search to find the match
+    match = re.search(pattern, text)
+
+    if match:
+        outside_change = match.group(1)
+        inside_percentage = match.group(2)
+        return outside_change, inside_percentage
+    else:
+        print("No match found.")
+        return None, None
+    
 def clean_text(text):
     return re.sub('[(\n\t)*]', '', text).strip()
 
-def convert_date(text, date_type = '%Y-%m-%d'):
+def convert_date(
+        text: datetime, 
+        date_type = '%Y-%m-%d') -> datetime:
     return datetime.strptime(text, date_type)
 
-def convert_text_dateformat(text, origin_type = '%Y-%m-%d', new_type = '%Y-%m-%d'):
+def convert_text_dateformat(
+        text: str, 
+        origin_type = '%Y-%m-%d',
+        new_type = '%Y-%m-%d') -> str:
     return convert_date(text, origin_type).strftime(new_type)
 
 def split_change_col(text):
