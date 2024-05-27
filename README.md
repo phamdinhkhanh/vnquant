@@ -4,7 +4,7 @@
 
 
 ## 1. Introduction
-This project provide the financial information and useful visualization instrument about Vietnam stock market to researcher. Particularly, there are many aspect of data relating to any stock being able to store and clone. The official version are built on both machine learning language Python and R.
+This project offers comprehensive financial information and advanced visualization tools for the Vietnam stock market to researchers. Specifically, it provides extensive data, including historical prices, finacial, business, and cashflow reports for individual or multiple symbols over the same period. This enables investors to conduct in-depth quantitative analyses and forecasting. Additionally, the available stock prices can be utilized to create visualizations with advanced metrics such as Bollinger Bands and Relative Strength Index (RSI), aiding in identifying optimal buying and selling points.
 
 ## 2. Setting:
 
@@ -35,7 +35,7 @@ pl.vnquant_candle_stick(data,
                         colors=['blue', 'red'],
                         width=800, height=600,
                         show_advanced=[],
-                        data_source='cafe', # not support vnd
+                        data_source='cafe',
                         **kargs)
 ```
 
@@ -105,22 +105,41 @@ You can load the prices of one or more stocks in specific time interval accordin
 ```{python}
 import vnquant.data as dt
 
-dt.DataLoader(symbols="VND",
-           start="2018-01-10",
-           end="2018-02-15",
-           minimal=True,
-           data_source="cafe")
+loader = dt.DataLoader(
+  symbols: Union[str, list], 
+  start: Optional[Union[str, datetime]]=None,
+  end: Optional[Union[str, datetime]]=None, 
+  data_source: str='CAFE', 
+  minimal: bool=True,
+  table_style: str='levels')
 ```
-**Arguments**
 
+For example:
+
+```
+loader = DataLoader(
+  symbols='VND', 
+  start='2018-01-10', end='2018-02-15', 
+  data_source='CAFE', 
+  minimal=True, 
+  table_style='levels')
+
+loader.download()
+```
+
+**Arguments**
 * `symbols` (Union[str, list]): A single stock symbol as a string or multiple stock symbols as a list of strings. The stock symbols regularly include 3 upper case letters except several special index such as: `E1VFVN30, VN100-INDEX, HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` in case your `data_source = "cafe"` and `VN30, HNX30, UPCOM` in case your `data_source = "vnd"`.
 * `start` (Optional[Union[str, datetime]], default=None): The start date for the data. Can be a string in the format 'YYYY-MM-DD' or a datetime object.
 * `end` (Optional[Union[str, datetime]], default=None): The end date for the data. Can be a string in the format 'YYYY-MM-DD' or a datetime object.
 * `data_source` (str, default='CAFE'): The data source to be used for downloading stock data. Currently supports 'CAFE' and 'VND'.
 * `minimal` (bool, default=True): If True, returns a minimal set of columns. If False, returns all available columns.
 * `table_style` (str, default='levels'): The style of the returned table. Options are 'levels', 'prefix', and 'stack'.
+- 'levels': Returns the DataFrame with multi-level colums of symbols and list of basic arguments like `['high', 'low', 'open', 'close', 'adjust', 'volume', 'value']`
+- 'prefix': Adds the stock symbol as a prefix to each column name.
+- 'stack': Returns the DataFrame and add one column 'code' to clarify each record belong to what stock symbol.
 
 ### 4.1. Clone one stock:
+
 ```{python}
 import vnquant.data as dt
 loader = dt.DataLoader('VND', '2018-02-02','2018-04-02')

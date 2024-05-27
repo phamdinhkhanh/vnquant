@@ -57,12 +57,6 @@ class DataLoader():
             loader = DataLoaderCAFE(self.symbols, self.start, self.end)
             stock_data = loader.download()
 
-        if self.minimal:
-            if str.lower(self.data_source) == 'vnd':
-                stock_data = stock_data[['high', 'low', 'open', 'close', 'adjust_close', 'volume_match', 'value_match']]
-            else:
-                stock_data = stock_data[['high', 'low', 'open', 'close', 'adjust_price', 'volume_match', 'value_match']]
-            stock_data.columns = ['high', 'low', 'open', 'close', 'adjust', 'volume', 'value']
         if self.table_style == 'levels':
             return stock_data
 
@@ -71,8 +65,15 @@ class DataLoader():
             stock_data.columns = new_column_names
 
         if self.table_style == 'stack':
-            stock_data = stock_data.stack('Symbols').reset_index()
+            stock_data = stock_data.stack('Symbols').reset_index().set_index('date')
+            stock_data.pop('Symbols')
             new_columns = [col if col!='Symbols' else 'code' for col in list(stock_data.columns)]
             stock_data.columns = new_columns
 
+        if self.minimal:
+            if str.lower(self.data_source) == 'vnd':
+                stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_close', 'volume_match', 'value_match']]
+            else:
+                stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_price', 'volume_match', 'value_match']]
+            stock_data.columns = ['code', 'high', 'low', 'open', 'close', 'adjust', 'volume', 'value']
         return stock_data

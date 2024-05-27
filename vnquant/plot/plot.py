@@ -81,7 +81,7 @@ def vnquant_candle_stick_source(
         )
     '''
     
-    loader = DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source, table_style='levels')
+    loader = DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source, table_style='minimal')
     data = loader.download()
     data = data[['high', 'low', 'open', 'close', 'adjust', 'volume']]
     title = '{} stock price & volume from {} to {}'.format(symbol, start_date, end_date)
@@ -96,23 +96,43 @@ def vnquant_candle_stick_source(
         w_rsi = 1
         row_heights = [0.3, 0.3, 0.15, 0.15]
 
-    if 'macd' not in show_advanced:
+    if show_advanced==['rsi', 'volume']:
         r_price = 1
         r_volume = 2
         r_rsi = 3
         w_rsi = 1
         row_heights = [0.5, 0.3, 0.2]
 
-    if 'rsi' not in show_advanced:
+    if show_advanced==['volume', 'macd']:
         r_price = 1
         r_volume = 2
         r_macd = 3
         w_macd = 1
         row_heights = [0.5, 0.3, 0.2]
 
-    if ('rsi' not in show_advanced) and ('macd' not in show_advanced):
+    if show_advanced==['macd', 'rsi']:
+        r_price = 1
+        r_macd = 3
+        w_macd = 1
+        r_rsi = 3
+        w_rsi = 1
+        row_heights = [0.5, 0.3, 0.2]
+    
+    if show_advanced==['volume']:
         r_price = 1
         r_volume = 2
+        row_heights = [0.6, 0.4]
+
+    if show_advanced==['macd']:
+        r_price = 1
+        r_macd = 2
+        w_macd = 1
+        row_heights = [0.6, 0.4]
+
+    if show_advanced==['rsi']:
+        r_price = 1
+        r_rsi = 2
+        w_rsi = 1
         row_heights = [0.6, 0.4]
 
     fig = make_subplots(rows=num_indices + 1, cols=1, shared_xaxes=True, vertical_spacing=0.02,
@@ -125,7 +145,8 @@ def vnquant_candle_stick_source(
             open=data['open'], high=data['high'],
             low=data['low'], close=data['close'],
             increasing_line_color=colors[0],
-            decreasing_line_color=colors[1]
+            decreasing_line_color=colors[1],
+            name='price'
         ),
         row=r_price, col=1
     )
@@ -216,6 +237,7 @@ def vnquant_candle_stick_source(
             go.Bar(
                 x=data.index,
                 y=data['volume'],
+                marker=dict(color='red'),
                 name='Volume'
             ),
         row=r_volume, col=1)

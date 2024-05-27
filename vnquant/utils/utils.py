@@ -1,4 +1,4 @@
-# Copyright (c) general_backbone. All rights reserved.
+# Copyright (c) vnquant. All rights reserved.
 from datetime import datetime
 import pytz
 import re
