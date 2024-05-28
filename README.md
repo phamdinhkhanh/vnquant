@@ -457,7 +457,9 @@ data.head(4)
     </tr>
   </tbody>
 </table>
-### 4.2. Clone more stocks:
+
+### 4.2. Clone more stocks
+
 We need to set up symbols as a list.
 ```{python}
 loader = dt.DataLoader(symbols=["VND", "VCB"], start="2018-01-10", end="2018-02-15", minimal=True, data_source="cafe")
