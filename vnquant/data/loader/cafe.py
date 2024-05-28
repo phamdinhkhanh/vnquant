@@ -56,6 +56,9 @@ class DataLoaderCAFE(DataLoadProto):
         # and page equal to 1, so that we can get a full data in the time interval from start_date and end_date
         res = requests.get(URL_CAFE, params=params)
         data = res.json()['Data']['Data']
+        if not data:
+            logger.error(f"Data of the symbol {symbol} is not available")
+            return None
         data = pd.DataFrame(data)
         data[['code']] = symbol
         stock_data = data[['code', 'Ngay',
