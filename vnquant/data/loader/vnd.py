@@ -29,6 +29,7 @@ class DataLoaderVND(DataLoadProto):
     def download(self):
         stock_datas = []
         symbols = self.pre_process_symbols()
+        logger.info('Start downloading data symbols {} from VNDIRECT, start: {}, end: {}!'.format(symbols, self.start, self.end))
         for symbol in symbols:
             stock_datas.append(self.download_one(symbol))
 
@@ -51,7 +52,10 @@ class DataLoaderVND(DataLoadProto):
         # and page equal to 1, so that we can get a full data in the time interval from start_date and end_date
         res = requests.get(API_VNDIRECT, params=params, headers=HEADERS)
         data = res.json()['data']
-        data = pd.DataFrame(data)
+        if not data:
+            logger.error(f"Data of the symbol {symbol} is not available")
+            return None
+        data = pd.DataFrame(data)        
         stock_data = data[['code', 'date', 'floor',
                            'basicPrice', 'ceilingPrice', 'floorPrice',
                            'close', 'open', 'high', 'low', 'average', 

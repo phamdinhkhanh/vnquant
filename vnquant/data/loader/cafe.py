@@ -32,6 +32,8 @@ class DataLoaderCAFE(DataLoadProto):
     def download(self):
         stock_datas = []
         symbols = self.pre_process_symbols()
+        logger.info('Start downloading data symbols {} from CAFEF, start: {}, end: {}!'.format(symbols, self.start, self.end))
+
         for symbol in symbols:
             stock_datas.append(self.download_one(symbol))
 
@@ -55,7 +57,7 @@ class DataLoaderCAFE(DataLoadProto):
         res = requests.get(URL_CAFE, params=params)
         data = res.json()['Data']['Data']
         data = pd.DataFrame(data)
-        data['code'] = symbol
+        data[['code']] = symbol
         stock_data = data[['code', 'Ngay',
                            'GiaDongCua', 'GiaMoCua', 'GiaCaoNhat', 'GiaThapNhat', 'GiaDieuChinh', 'ThayDoi',
                            'KhoiLuongKhopLenh', 'GiaTriKhopLenh', 'KLThoaThuan', 'GtThoaThuan']].copy()
@@ -77,7 +79,7 @@ class DataLoaderCAFE(DataLoadProto):
         stock_data[list_numeric_columns] = stock_data[list_numeric_columns].astype(float)
         stock_data.index = list(map(lambda x: datetime.strptime(x, '%d/%m/%Y'), stock_data.index))
         stock_data.index.name = 'date'
-        stock_data = stock_data.sort_index(ascending=False).iloc[1:, :]
+        stock_data = stock_data.sort_index(ascending=False)
         stock_data.fillna(method='ffill', inplace=True)
         stock_data['total_volume'] = stock_data.volume_match + stock_data.volume_reconcile
         stock_data['total_value'] = stock_data.value_match + stock_data.value_reconcile

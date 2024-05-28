@@ -6,8 +6,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
-import sys
-sys.path.insert(0, '/Users/phamdinhkhanh/Documents/vnquant')
+# import sys
+# sys.path.insert(0, '/Users/phamdinhkhanh/Documents/vnquant')
+import pandas as pd
 from vnquant import configs
 from vnquant.data.loader import DataLoaderVND, DataLoaderCAFE
 from vnquant.log.logging import logger
@@ -56,24 +57,38 @@ class DataLoader():
         else:
             loader = DataLoaderCAFE(self.symbols, self.start, self.end)
             stock_data = loader.download()
+        
+        if self.minimal:
+            if str.lower(self.data_source) == 'vnd':
+                stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_close', 'volume_match', 'value_match']]
+            else:
+                stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_price', 'volume_match', 'value_match']]
+            
+            # Rename columns adjust_close or adjust_price to adjust
+            list_columns_names = stock_data.columns.names
+            list_tupple_names = stock_data.columns.values
+            
+            for i, (metric, symbol) in enumerate(list_tupple_names):
+                if metric in ['adjust_price', 'adjust_close']:
+                    list_tupple_names[i] = ('adjust', symbol)
 
+            stock_data.columns = pd.MultiIndex.from_tuples(
+                list_tupple_names,
+                names=list_columns_names
+            )
+        
         if self.table_style == 'levels':
             return stock_data
 
         if self.table_style == 'prefix':
             new_column_names = [f'{symbol}_{attribute}' for attribute, symbol in stock_data.columns]
             stock_data.columns = new_column_names
+            return stock_data
 
         if self.table_style == 'stack':
             stock_data = stock_data.stack('Symbols').reset_index().set_index('date')
             stock_data.pop('Symbols')
             new_columns = [col if col!='Symbols' else 'code' for col in list(stock_data.columns)]
             stock_data.columns = new_columns
-
-        if self.minimal:
-            if str.lower(self.data_source) == 'vnd':
-                stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_close', 'volume_match', 'value_match']]
-            else:
-                stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_price', 'volume_match', 'value_match']]
-            stock_data.columns = ['code', 'high', 'low', 'open', 'close', 'adjust', 'volume', 'value']
-        return stock_data
+            return stock_data
+        

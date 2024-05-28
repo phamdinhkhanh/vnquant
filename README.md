@@ -42,7 +42,7 @@ pl.vnquant_candle_stick(data,
 **Arguments**
 * `data`: is pandas data frame of OHLC type or OHLCV type, or string symbol of any VietNam stock index.
 in case symbol, data is automatically cloned from open source.
-* `title`: General title of candle stick chart. In case data is symbol, title going to be default according to cloned data.
+* `title`: General title of candle stick chart. If data is a symbol, title is going to be created based on symbol and cloned datetime interval.
 * `xlab`: x label. Default Date.
 * `ylab`: y label. Default Price.
 * `start_date`: start date. Default None. Must to be declared when data is symbol.
@@ -100,7 +100,7 @@ print(utils._isOHLCV(data_vnd))
 
 Return `True` mean data frame is adapted types.
 
-## 4. Clone Stock Prices: (0.0.1)
+## 4. Clone Stock Prices: (0.1.2)
 You can load the prices of one or more stocks in specific time interval according to syntax as below.
 ```{python}
 import vnquant.data as dt
@@ -128,7 +128,7 @@ loader.download()
 ```
 
 **Arguments**
-* `symbols` (Union[str, list]): A single stock symbol as a string or multiple stock symbols as a list of strings. The stock symbols regularly include 3 upper case letters except several special index such as: `E1VFVN30, VN100-INDEX, HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` in case your `data_source = "cafe"` and `VN30, HNX30, UPCOM` in case your `data_source = "vnd"`.
+* `symbols` (Union[str, list]): A single stock symbol as a string or multiple stock symbols as a list of strings. The stock symbols regularly include 3 upper case letters except several special index such as: `E1VFVN30, FUEVN100` for both data_source `cafe and vnd`, `HNX-INDEX, HNX30-INDEX, UPCOM-INDEX` for `cafe`.
 * `start` (Optional[Union[str, datetime]], default=None): The start date for the data. Can be a string in the format 'YYYY-MM-DD' or a datetime object.
 * `end` (Optional[Union[str, datetime]], default=None): The end date for the data. Can be a string in the format 'YYYY-MM-DD' or a datetime object.
 * `data_source` (str, default='CAFE'): The data source to be used for downloading stock data. Currently supports 'CAFE' and 'VND'.
@@ -139,6 +139,10 @@ loader.download()
 - 'stack': Returns the DataFrame and add one column 'code' to clarify each record belong to what stock symbol.
 
 ### 4.1. Clone one stock:
+
+There are three return formats supported in the latest version 0.1.2.
+
+- Multiple-level: It will return a table with mutilple column indexes with two main levels Arguments (including many basical stock indexes) and Symbols (including list of stock codes).
 
 ```{python}
 import vnquant.data as dt
@@ -225,6 +229,234 @@ data.head()
   </tbody>
 </table>
 
+- Prefix: The stock code is appended before each index to become a column name.
+
+```{python}
+import vnquant.data as dt
+loader = dt.DataLoader(['VND', 'FPT'], '2018-02-02','2018-04-02', table_style='prefix')
+data = loader.download()
+data.head()
+```
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>VND_code</th>
+      <th>FPT_code</th>
+      <th>VND_high</th>
+      <th>FPT_high</th>
+      <th>VND_low</th>
+      <th>FPT_low</th>
+      <th>VND_open</th>
+      <th>FPT_open</th>
+      <th>VND_close</th>
+      <th>FPT_close</th>
+      <th>VND_adjust</th>
+      <th>FPT_adjust</th>
+      <th>VND_volume_match</th>
+      <th>FPT_volume_match</th>
+      <th>VND_value_match</th>
+      <th>FPT_value_match</th>
+    </tr>
+    <tr>
+      <th>date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2018-04-02</th>
+      <td>VND</td>
+      <td>FPT</td>
+      <td>29.80</td>
+      <td>61.7</td>
+      <td>29.10</td>
+      <td>61.0</td>
+      <td>29.10</td>
+      <td>61.5</td>
+      <td>29.55</td>
+      <td>61.5</td>
+      <td>6.52</td>
+      <td>21.98</td>
+      <td>2141980.0</td>
+      <td>2194820.0</td>
+      <td>6.320100e+10</td>
+      <td>1.347410e+11</td>
+    </tr>
+    <tr>
+      <th>2018-03-30</th>
+      <td>VND</td>
+      <td>FPT</td>
+      <td>29.50</td>
+      <td>61.3</td>
+      <td>28.75</td>
+      <td>59.4</td>
+      <td>29.00</td>
+      <td>59.6</td>
+      <td>29.05</td>
+      <td>60.7</td>
+      <td>6.41</td>
+      <td>21.69</td>
+      <td>1688000.0</td>
+      <td>2434830.0</td>
+      <td>4.925300e+10</td>
+      <td>1.474940e+11</td>
+    </tr>
+    <tr>
+      <th>2018-03-29</th>
+      <td>VND</td>
+      <td>FPT</td>
+      <td>29.00</td>
+      <td>59.7</td>
+      <td>28.25</td>
+      <td>59.0</td>
+      <td>28.50</td>
+      <td>59.4</td>
+      <td>29.00</td>
+      <td>59.5</td>
+      <td>6.40</td>
+      <td>21.26</td>
+      <td>1294580.0</td>
+      <td>827280.0</td>
+      <td>3.717900e+10</td>
+      <td>4.915900e+10</td>
+    </tr>
+    <tr>
+      <th>2018-03-28</th>
+      <td>VND</td>
+      <td>FPT</td>
+      <td>28.65</td>
+      <td>59.4</td>
+      <td>27.60</td>
+      <td>58.8</td>
+      <td>27.75</td>
+      <td>59.1</td>
+      <td>28.65</td>
+      <td>58.9</td>
+      <td>6.32</td>
+      <td>21.05</td>
+      <td>1429910.0</td>
+      <td>660440.0</td>
+      <td>4.012300e+10</td>
+      <td>3.901500e+10</td>
+    </tr>
+    <tr>
+      <th>2018-03-27</th>
+      <td>VND</td>
+      <td>FPT</td>
+      <td>28.55</td>
+      <td>60.1</td>
+      <td>27.75</td>
+      <td>59.0</td>
+      <td>28.55</td>
+      <td>59.9</td>
+      <td>28.00</td>
+      <td>59.5</td>
+      <td>6.18</td>
+      <td>21.26</td>
+      <td>2589800.0</td>
+      <td>993260.0</td>
+      <td>7.289400e+10</td>
+      <td>5.916600e+10</td>
+    </tr>
+  </tbody>
+</table>
+
+- Stack: It will add one more column named code to demonstrate the stock symbols.
+
+```{python}
+import vnquant.data as dt
+loader = dt.DataLoader(['VND', 'FPT'], '2018-02-02','2018-04-02', table_style='stack')
+data = loader.download()
+data.head(4)
+```
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>high</th>
+      <th>low</th>
+      <th>open</th>
+      <th>close</th>
+      <th>adjust</th>
+      <th>volume_match</th>
+      <th>value_match</th>
+    </tr>
+    <tr>
+      <th>date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2018-04-02</th>
+      <td>FPT</td>
+      <td>61.7</td>
+      <td>61.00</td>
+      <td>61.5</td>
+      <td>61.50</td>
+      <td>21.98</td>
+      <td>2194820.0</td>
+      <td>1.347410e+11</td>
+    </tr>
+    <tr>
+      <th>2018-04-02</th>
+      <td>VND</td>
+      <td>29.8</td>
+      <td>29.10</td>
+      <td>29.1</td>
+      <td>29.55</td>
+      <td>6.52</td>
+      <td>2141980.0</td>
+      <td>6.320100e+10</td>
+    </tr>
+    <tr>
+      <th>2018-03-30</th>
+      <td>FPT</td>
+      <td>61.3</td>
+      <td>59.40</td>
+      <td>59.6</td>
+      <td>60.70</td>
+      <td>21.69</td>
+      <td>2434830.0</td>
+      <td>1.474940e+11</td>
+    </tr>
+    <tr>
+      <th>2018-03-30</th>
+      <td>VND</td>
+      <td>29.5</td>
+      <td>28.75</td>
+      <td>29.0</td>
+      <td>29.05</td>
+      <td>6.41</td>
+      <td>1688000.0</td>
+      <td>4.925300e+10</td>
+    </tr>
+  </tbody>
+</table>
 ### 4.2. Clone more stocks:
 We need to set up symbols as a list.
 ```{python}
