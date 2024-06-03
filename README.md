@@ -57,15 +57,17 @@ in case symbol, data is automatically cloned from open source.
 
 In this way, you can visualize stock price clone from VND or CAFE source by pass symbol, start_date, end_date into module as below:
 ```{python}
-from vnquant import plot as pl
-pl.vnquant_candle_stick(
+from vnquant import plot as plt
+plt.vnquant_candle_stick(
     data='VND',
     title='VND symbol from 2019-09-01 to 2019-11-01',
     xlab='Date', ylab='Price',
     start_date='2019-09-01',
     end_date='2019-11-01',
     data_source='CAFE',
-    show_advanced=['volume', 'macd', 'rsi']
+    show_advanced=['volume', 'macd', 'rsi'],
+    width=1600,
+    height=800
 )
 ```
 
@@ -76,12 +78,13 @@ You can suppress volume by set up show_vol=False. Result as below:
 <img src="./vnquant/imgs/stock_3.png" style="display: block;margin-left: auto;margin-right: auto;width:50%;" />
 
 ### 3.2. Visualization from data frame
-Data frame must be OHLC or OHLCV type. OHLC type when it includes ['open','high','low','close'] and OHLCV is ['open','high','low','close','volume']. In case your data frame have columns with the same function, you should accordingly rename its.
+Data frame must be OHLC or OHLCV type. OHLC type when it includes ['open','high','low','close'] and OHLCV is ['open','high','low','close','volume'] or ['open','high','low','close','volume_match'] and index is DateTime. In case your data frame have columns with the same function, you should accordingly rename its.
 
 ```{python}
-from vnquant import pl
-pl.vnquant_candle_stick(
-    data = data_vnd,
+from vnquant import plot as plt
+
+plt.vnquant_candle_stick(
+    data = data,
     title='Your data',
     ylab='Date', xlab='Price',
     show_advanced=['volume', 'macd', 'rsi']

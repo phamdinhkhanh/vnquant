@@ -1,4 +1,4 @@
-﻿# Copyright (c) general_backbone. All rights reserved.
+﻿# Copyright (c) vnquant. All rights reserved.
 from bs4 import BeautifulSoup
 import requests
 import vnquant.utils.utils as utils

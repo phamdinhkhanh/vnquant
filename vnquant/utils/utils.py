@@ -152,9 +152,12 @@ def _isOHLCV(data):
     except:
         cols = list(data.columns)
 
-    defau_cols = ['high', 'low', 'close', 'open', 'volume']
+    default_cols1 = ['high', 'low', 'close', 'open', 'volume_match']
+    default_cols2 = ['high', 'low', 'close', 'open', 'volume']
 
-    if all(col in cols for col in defau_cols):
+    if all(col in cols for col in default_cols1):
+        return True
+    if all(col in cols for col in default_cols2):
         return True
     else:
         return False

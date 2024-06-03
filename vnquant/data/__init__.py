@@ -1,4 +1,4 @@
-﻿# Copyright (c) general_backbone. All rights reserved.
+﻿# Copyright (c) vnquant. All rights reserved.
 from .dataloader import *
 from .finance import *
 

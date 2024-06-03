@@ -63,7 +63,6 @@ class DataLoader():
                 stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_close', 'volume_match', 'value_match']]
             else:
                 stock_data = stock_data[['code', 'high', 'low', 'open', 'close', 'adjust_price', 'volume_match', 'value_match']]
-            
             # Rename columns adjust_close or adjust_price to adjust
             list_columns_names = stock_data.columns.names
             list_tupple_names = stock_data.columns.values
@@ -76,7 +75,6 @@ class DataLoader():
                 list_tupple_names,
                 names=list_columns_names
             )
-        
         if self.table_style == 'levels':
             return stock_data
 

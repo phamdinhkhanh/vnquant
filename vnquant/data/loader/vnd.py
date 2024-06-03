@@ -32,7 +32,6 @@ class DataLoaderVND(DataLoadProto):
         logger.info('Start downloading data symbols {} from VNDIRECT, start: {}, end: {}!'.format(symbols, self.start, self.end))
         for symbol in symbols:
             stock_datas.append(self.download_one(symbol))
-
         data = pd.concat(stock_datas, axis=1)
         data = data.sort_index(ascending=False)
         return data

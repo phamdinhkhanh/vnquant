@@ -81,10 +81,16 @@ def vnquant_candle_stick_source(
         )
     '''
     
-    loader = DataLoader(symbol, start_date, end_date, minimal=True, data_source=data_source, table_style='minimal')
+    loader = DataLoader(symbols=symbol, 
+                        start=start_date, 
+                        end=end_date, minimal=True, 
+                        data_source=data_source, table_style='levels')
+
     data = loader.download()
-    data = data[['high', 'low', 'open', 'close', 'adjust', 'volume']]
+    data = data[['high', 'low', 'open', 'close', 'adjust', 'volume_match']]
+    data.columns = ['high', 'low', 'open', 'close', 'adjust', 'volume']
     title = '{} stock price & volume from {} to {}'.format(symbol, start_date, end_date)
+
     num_indices = len(show_advanced)
 
     if num_indices == 3:
@@ -254,14 +260,14 @@ def vnquant_candle_stick_source(
     fig.show()
 
 def vnquant_candle_stick(data,
-                          title=None,
-                          xlab='Date', ylab='Price',
-                          start_date=None, end_date=None,
-                          colors=['blue', 'red'],
-                          width=800, height=600,
-                          data_source='VND',
-                          show_advanced=['volume', 'macd', 'rsi'],
-                          **kargs):
+                        title=None,
+                        xlab='Date', ylab='Price',
+                        start_date=None, end_date=None,
+                        colors=['blue', 'red'],
+                        width=800, height=600,
+                        data_source='VND',
+                        show_advanced=['volume', 'macd', 'rsi'],
+                        **kargs):
     '''
     This function is to visualize a candle stick stock index with advanced metrics
     Args:
@@ -298,7 +304,7 @@ def vnquant_candle_stick(data,
     else:
         if 'volume' in show_advanced:
             assert utils._isOHLCV(data)
-            defau_cols = ['high', 'low', 'open', 'close', 'volume']
+            defau_cols = ['high', 'low', 'open', 'close', 'volume_match']
             data = data[defau_cols].copy()
             data.columns = defau_cols
         else:
@@ -306,10 +312,15 @@ def vnquant_candle_stick(data,
             defau_cols = ['high', 'low', 'open', 'close']
             data = data[defau_cols].copy()
             data.columns = defau_cols
-
+        
         x = data.index
 
-        if not isinstance(x, pd.core.indexes.datetimes.DatetimeIndex):
+        try:
+            data.index = pd.DatetimeIndex(x)
+        except IndexError:
+            raise IndexError('index of dataframe must be DatetimeIndex!')
+        
+        if not isinstance(data.index, pd.core.indexes.datetimes.DatetimeIndex):
             raise IndexError('index of dataframe must be DatetimeIndex!')
 
         if start_date is None:
@@ -330,9 +341,15 @@ def vnquant_candle_stick(data,
             row=1, col=1)
 
         if 'volume' in show_advanced:
+            volume = None
+            if 'volume' in data.columns:
+                volume = data['volume']
+            elif 'volume_match' in data.columns:
+                volume = data['volume_match']
+            
             fig.append_trace(go.Bar(
                 x=x,
-                y=data['volume'],
+                y=volume,
                 name='Volume'),
                 row=2, col=1)
 
