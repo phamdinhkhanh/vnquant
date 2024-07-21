@@ -46,6 +46,7 @@ class DataLoader():
         self.symbols = symbols
         self.start = start
         self.end = end
+        assert str.lower(data_source) in ['vnd', 'cafe']
         self.data_source = data_source
         self.minimal = minimal
         self.table_style = table_style
@@ -54,9 +55,11 @@ class DataLoader():
         if str.lower(self.data_source) == 'vnd':
             loader = DataLoaderVND(self.symbols, self.start, self.end)
             stock_data = loader.download()
-        else:
+        elif str.lower(self.data_source) == 'cafe':
             loader = DataLoaderCAFE(self.symbols, self.start, self.end)
             stock_data = loader.download()
+        else:
+            raise ValueError(f"Unknown data source: {self.data_source}")
         
         if self.minimal:
             if str.lower(self.data_source) == 'vnd':
