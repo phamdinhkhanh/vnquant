@@ -51,7 +51,6 @@ setup(name=DISTNAME,
         'Programming Language :: Python :: 3.6',
         'Topic :: Financial/Stock Market',
       ],
-
       keywords = 'data',
       install_requires=INSTALL_REQUIRES,
       zip_safe=False,

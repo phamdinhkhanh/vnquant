@@ -11,7 +11,7 @@ import sys
 # sys.path.insert(0,'/Users/phamdinhkhanh/Documents/vnquant')
 from vnquant import utils
 from vnquant import configs
-from vnquant.log.logging import logger
+from vnquant.log import logger
 from vnquant.data.loader.proto import DataLoadProto
 
 API_VNDIRECT = configs.API_VNDIRECT

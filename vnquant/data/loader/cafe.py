@@ -1,6 +1,5 @@
 # Copyright (c) vnquant. All rights reserved.
 import pandas as pd
-import logging as logging
 import requests
 from datetime import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -11,7 +10,7 @@ import sys
 # sys.path.insert(0,'/Users/phamdinhkhanh/Documents/vnquant')
 from vnquant import configs
 from vnquant.data.loader.proto import DataLoadProto
-from vnquant.log.logging import logger
+from vnquant.log import logger
 from vnquant.utils import utils
 
 URL_VND = configs.URL_VND
