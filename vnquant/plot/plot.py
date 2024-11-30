@@ -92,6 +92,11 @@ def vnquant_candle_stick_source(
     title = '{} stock price & volume from {} to {}'.format(symbol, start_date, end_date)
 
     num_indices = len(show_advanced)
+    row_heights = [round(1/(num_indices+1), 1)]*(num_indices)+[1-round(1/(num_indices+1), 1)*num_indices]
+    r_price = 1
+    r_volume = 2
+    r_rsi = 3
+    w_rsi = 1
 
     if num_indices == 3:
         r_price = 1
